@@ -1,26 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Notifications.Domain.UnitTests.PeopleReadModelsHandler
+﻿namespace Notifications.Domain.UnitTests.PeopleReadModelsHandler
 {
-    using Notifications.Messages;
+    using Domain;
+
+    using Messages;
 
     using NUnit.Framework;
 
     using Should;
 
-    using Domain;
-
     [TestFixture]
-    public class PeopleReadModelsHandlerTests
+    public class PeopleReadModelsHandlerDirectly
     {
         [Test]
         public void Add()
         {
-            var sut = new PeopleReadModelsHandler();
+            var sut = new PersonalNumberAndTokenReadModell();
             sut.PeopleWithTokens.ShouldBeEmpty();
 
             var addEvt = new FirebaseTokenAdded("800412XXXX", "ABCD");
@@ -31,7 +25,7 @@ namespace Notifications.Domain.UnitTests.PeopleReadModelsHandler
         [Test]
         public void AddRemove()
         {
-            var sut = new PeopleReadModelsHandler();
+            var sut = new PersonalNumberAndTokenReadModell();
             sut.PeopleWithTokens.ShouldBeEmpty();
 
             var addEvt = new FirebaseTokenAdded("800412XXXX", "ABCD");
@@ -46,7 +40,7 @@ namespace Notifications.Domain.UnitTests.PeopleReadModelsHandler
         [Test]
         public void AddToTokensSamePnr()
         {
-            var sut = new PeopleReadModelsHandler();
+            var sut = new PersonalNumberAndTokenReadModell();
             sut.PeopleWithTokens.ShouldBeEmpty();
 
             var addEvt = new FirebaseTokenAdded("800412XXXX", "ABCD");
@@ -62,7 +56,7 @@ namespace Notifications.Domain.UnitTests.PeopleReadModelsHandler
         [Test]
         public void AddToTokensSamePnrRemoveOne()
         {
-            var sut = new PeopleReadModelsHandler();
+            var sut = new PersonalNumberAndTokenReadModell();
             sut.PeopleWithTokens.ShouldBeEmpty();
 
             var addEvt = new FirebaseTokenAdded("800412XXXX", "ABCD");

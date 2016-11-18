@@ -23,7 +23,7 @@ namespace Notifications.Domain.UnitTests.PipeLineHook
         private Mock<IObserver<ICommit>> _observer;
 
         [OneTimeSetUp]
-        public async Task Setup()
+        public void Setup()
         {
             // THis Could be way nicer!
             _observer = new Mock<IObserver<ICommit>>(MockBehavior.Loose);

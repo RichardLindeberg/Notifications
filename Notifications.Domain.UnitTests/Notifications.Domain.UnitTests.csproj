@@ -61,7 +61,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
-    <Compile Include="PeopleReadModelsHandler\PeopleReadModelsHandlerTests.cs" />
+    <Compile Include="PeopleReadModelsHandler\PeopleReadModelsHandlerDirectly.cs" />
+    <Compile Include="PeopleReadModelsHandler\ReadModelsSubscriberTests.cs" />
     <Compile Include="Person\WhenAddingSendingMessageToOneToken.cs" />
     <Compile Include="Person\WhenAddingToken.cs" />
     <Compile Include="Person\GivenEvents\PersonTestBase.cs" />

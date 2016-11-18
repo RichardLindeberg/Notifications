@@ -40,6 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\AddFireBaseToken.cs" />
+    <Compile Include="Commands\IPersonCommand.cs" />
+    <Compile Include="Commands\RemoveFireBaseToken.cs" />
+    <Compile Include="Commands\SendMessage.cs" />
     <Compile Include="Events\Event.cs" />
     <Compile Include="Events\FailedToSendFirebaseMessage.cs" />
     <Compile Include="Events\FirebaseTokenAdded.cs" />

@@ -7,11 +7,6 @@ namespace Notifications.Domain
 
     using NLog;
 
-    public interface IPipeLineHook : IPipelineHook
-    {
-        IDisposable Subscribe(IObserver<ICommit> observer);
-    }
-
     public class PipeLineHook : PipelineHookBase, IPipeLineHook
     {
         private readonly List<IObserver<ICommit>> _messageObservers;
