@@ -7,28 +7,6 @@ namespace Notifications.Domain
 
     using Messages;
 
-    public class FireBaseNotificationResponse
-    {
-        public FireBaseNotificationResponse(bool wasSent, bool shouldBeDeleted, string errorMessage)
-        {
-            WasSent = wasSent;
-            ShouldBeDeleted = shouldBeDeleted;
-            ErrorMessage = errorMessage;
-        }
-
-        public bool WasSent { get; }
-
-        public bool ShouldBeDeleted { get; }
-
-        public string ErrorMessage { get; }
-    }
-
-    public interface IFirebaseNotificationSender
-    {
-        FireBaseNotificationResponse SendNotification(string firebaseToken, string message);
-    }
-
-
     public class Person
     {
         private readonly IFirebaseNotificationSender _firebaseNotificationSender;

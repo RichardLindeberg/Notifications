@@ -49,8 +49,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BadEventInStreamException.cs" />
-    <Compile Include="Class1.cs" />
+    <Compile Include="EventStoreFactory.cs" />
+    <Compile Include="FireBaseNotificationResponse.cs" />
+    <Compile Include="IFirebaseNotificationSender.cs" />
+    <Compile Include="ObserverForPollingClient.cs" />
+    <Compile Include="PeopleReadModelsHandler.cs" />
     <Compile Include="Person.cs" />
+    <Compile Include="PersonWithToken.cs" />
+    <Compile Include="PipeLineHook.cs" />
     <Compile Include="PollingHook.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
