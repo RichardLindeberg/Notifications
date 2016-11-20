@@ -11,7 +11,7 @@ namespace Notifications.Domain.UnitTests.PeopleReadModelsHandler
 
     using Should;
 
-    using PipeLineHook = Notifications.Storage.PipeLineHook;
+    using Notifications.Storage;
 
     [TestFixture]
     public class ReadModelsSubscriberTests
