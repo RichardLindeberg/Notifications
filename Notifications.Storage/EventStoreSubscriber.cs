@@ -1,6 +1,7 @@
-﻿namespace Notifications.Domain
+﻿namespace Notifications.Storage
 {
     using System;
+
     using NEventStore;
     using NEventStore.Client;
 

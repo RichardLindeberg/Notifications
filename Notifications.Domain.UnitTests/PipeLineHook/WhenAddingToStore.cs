@@ -6,6 +6,9 @@
     using Moq;
     using NEventStore;
     using NEventStore.Client;
+
+    using Notifications.Storage;
+
     using NUnit.Framework;
 
     public class WhenAddingToStore

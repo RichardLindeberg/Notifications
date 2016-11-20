@@ -1,7 +1,6 @@
-﻿namespace Notifications.Domain
+﻿namespace Notifications.Storage
 {
     using NEventStore;
-    using NEventStore.Persistence.Sql.SqlDialects;
 
     public class EventStoreFactory
     {

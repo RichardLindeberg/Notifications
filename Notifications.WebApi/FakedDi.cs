@@ -3,6 +3,7 @@
     using NEventStore;
 
     using Notifications.Domain;
+    using Notifications.Storage;
 
     public static class FakedDi
     {

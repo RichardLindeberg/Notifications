@@ -1,4 +1,4 @@
-namespace Notifications.Domain
+namespace Notifications.Storage
 {
     using System;
 

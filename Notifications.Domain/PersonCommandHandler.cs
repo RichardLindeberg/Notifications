@@ -6,11 +6,11 @@ namespace Notifications.Domain
 
     public class PersonCommandHandler
     {
-        private readonly PersonExecutor _personExecutor;
+        private readonly IPersonExecutor _personExecutor;
 
         private readonly PersonalNumberAndTokenReadModell _personalNumberAndTokenReadModell;
 
-        public PersonCommandHandler(PersonExecutor personExecutor, PersonalNumberAndTokenReadModell personalNumberAndTokenReadModell )
+        public PersonCommandHandler(IPersonExecutor personExecutor, PersonalNumberAndTokenReadModell personalNumberAndTokenReadModell )
         {
             _personExecutor = personExecutor;
             _personalNumberAndTokenReadModell = personalNumberAndTokenReadModell;

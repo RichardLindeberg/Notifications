@@ -5,12 +5,13 @@ namespace Notifications.Domain.UnitTests.PeopleReadModelsHandler
     using NEventStore;
 
     using Notifications.Messages;
+    using Notifications.Storage;
 
     using NUnit.Framework;
 
     using Should;
 
-    using PipeLineHook = Notifications.Domain.PipeLineHook;
+    using PipeLineHook = Notifications.Storage.PipeLineHook;
 
     [TestFixture]
     public class ReadModelsSubscriberTests

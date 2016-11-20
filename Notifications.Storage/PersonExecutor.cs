@@ -1,13 +1,14 @@
-namespace Notifications.Domain
+﻿namespace Notifications.Storage
 {
     using System;
     using System.Linq;
 
     using NEventStore;
 
+    using Notifications.Domain;
     using Notifications.Messages;
 
-    public class PersonExecutor
+    public class PersonExecutor : IPersonExecutor
     {
         public const string StreamName = "Person-";
         private readonly IStoreEvents _store;

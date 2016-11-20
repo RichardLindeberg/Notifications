@@ -123,6 +123,10 @@
       <Project>{7E7272DF-BFE6-4FEC-9E7E-0D580B9D49C7}</Project>
       <Name>Notifications.Messages</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Notifications.Storage\Notifications.Storage.csproj">
+      <Project>{55ce46ee-451b-49d1-aea5-8cce9750f6c0}</Project>
+      <Name>Notifications.Storage</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

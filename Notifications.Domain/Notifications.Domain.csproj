@@ -30,10 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NEventStore, Version=5.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NEventStore.5.2.0\lib\net40\NEventStore.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\packages\NLog.4.3.11\lib\net45\NLog.dll</HintPath>
       <Private>True</Private>
@@ -49,20 +45,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BadEventInStreamException.cs" />
-    <Compile Include="EventStoreFactory.cs" />
-    <Compile Include="EventStoreSubscriber.cs" />
     <Compile Include="FireBaseNotificationResponse.cs" />
     <Compile Include="IFirebaseNotificationSender.cs" />
-    <Compile Include="IPipeLineHook.cs" />
-    <Compile Include="ObserverForPollingClient.cs" />
-    <Compile Include="PeopleReadModellsSubscriber.cs" />
     <Compile Include="PersonalNumberAndTokenReadModell.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="PersonCommandHandler.cs" />
-    <Compile Include="PersonExecutor.cs" />
+    <Compile Include="IPersonExecutor.cs" />
     <Compile Include="PersonWithToken.cs" />
-    <Compile Include="PipeLineHook.cs" />
-    <Compile Include="PollingHook.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

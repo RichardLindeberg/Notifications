@@ -12,6 +12,8 @@ namespace Notifications.Domain.UnitTests.PipeLineHook
 
     using NEventStore;
 
+    using Notifications.Storage;
+
     using NUnit.Framework;
 
     public class WhenHavingPollingClient

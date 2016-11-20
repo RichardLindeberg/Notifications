@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Notifications.Messages", "N
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Notifications.Domain.UnitTests", "Notifications.Domain.UnitTests\Notifications.Domain.UnitTests.csproj", "{505B933D-E8A1-423B-BD4A-17067579083D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Notifications.Storage", "Notifications.Storage\Notifications.Storage.csproj", "{55CE46EE-451B-49D1-AEA5-8CCE9750F6C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{505B933D-E8A1-423B-BD4A-17067579083D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{505B933D-E8A1-423B-BD4A-17067579083D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{505B933D-E8A1-423B-BD4A-17067579083D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55CE46EE-451B-49D1-AEA5-8CCE9750F6C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55CE46EE-451B-49D1-AEA5-8CCE9750F6C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55CE46EE-451B-49D1-AEA5-8CCE9750F6C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55CE46EE-451B-49D1-AEA5-8CCE9750F6C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
