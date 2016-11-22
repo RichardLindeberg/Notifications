@@ -1,4 +1,6 @@
-﻿namespace Notifications.Storage
+﻿using NEventStore.Persistence.Sql.SqlDialects;
+
+namespace Notifications.Storage
 {
     using NEventStore;
 
@@ -14,9 +16,9 @@
         public IStoreEvents GetStore()
         {
             return Wireup.Init()
-                //.UsingSqlPersistence(
-                //    "Persist Security Info=False;Integrated Security=SSPI;database=Notifications;server=(local)").WithDialect(new MsSqlDialect())
-                .UsingInMemoryPersistence()
+                .UsingSqlPersistence("Notifications").WithDialect(new MsSqlDialect())
+                .InitializeStorageEngine()
+                //.UsingInMemoryPersistence()
                 .UsingJsonSerialization()
                 .HookIntoPipelineUsing(_pipeLineHook)
                 .Build();
