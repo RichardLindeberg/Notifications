@@ -16,15 +16,19 @@
 
         public static void Main(string[] args)
         {
+            Console.WriteLine("warm up");
             var max = 10000;
             var ints = new List<int>(max);
             for (int i = 0; i < max; i++)
             {
                 ints.Add(i);
             }
-
+            var swStartup = new Stopwatch();
+            swStartup.Start();
             var comdHandler = FakedDi.GetPersonCommandHandler;
+            swStartup.Stop();
             var sw = new Stopwatch();
+            Console.WriteLine("Warmup took " + swStartup.Elapsed + " or " + swStartup.ElapsedMilliseconds + "ms");
             Console.WriteLine("Will add some data to database..");
             sw.Start();
             Parallel.ForEach(
@@ -38,7 +42,7 @@
                         }
                     });
             sw.Stop();  
-            Console.WriteLine("Testing done.. it took " + sw.Elapsed + " or " + sw.ElapsedMilliseconds + " milliseconds to add " + max + " people with three notifications each");
+            Console.WriteLine("Testing done.. it took " + sw.Elapsed + " or " + sw.ElapsedMilliseconds + " milliseconds to add " + max + " people with three notifications each, startup was " + swStartup.ElapsedMilliseconds);
             Console.ReadLine();
         }
 
