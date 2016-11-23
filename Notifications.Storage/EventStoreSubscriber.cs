@@ -25,6 +25,7 @@
             _pipeLineHook.Subscribe(observerForPollingClient);
             commitObserver.Subscribe(observer);
             commitObserver.Start();
+            commitObserver.PollNow();
         }
     }
 }

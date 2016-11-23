@@ -58,6 +58,7 @@
                     new PeopleReadModellsSubscriber(personalNumberAndTokenReadModell);
                 eventStoreSubscriber = new EventStoreSubscriber(store, pipleLineHook);
                 eventStoreSubscriber.Subscribe(peopleReadModellsSubscriber);
+                
                 personExecutor = new PersonExecutor(store, null);
                 personCommandHandler = new PersonCommandHandler(personExecutor, personalNumberAndTokenReadModell);
                 isReady = true;

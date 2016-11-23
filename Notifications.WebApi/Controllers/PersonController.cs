@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
-using System.Web.Http;
-
-namespace Notifications.WebApi.Controllers
+﻿namespace Notifications.WebApi.Controllers
 {
-    using Notifications.Messages.Commands;
+    using System;
+    using System.Net;
+    using System.Web.Http;
+
+    using Messages.Commands;
 
     public class PersonController : ApiController
     {
@@ -22,6 +19,11 @@ namespace Notifications.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult AddToken(AddFireBaseTokenCommand command)
         {
+            if (command == null)
+            {
+                return BadRequest("No command");
+            }
+
             try
             {
                 FakedDi.GetPersonCommandHandler.Handle(command);
@@ -38,6 +40,11 @@ namespace Notifications.WebApi.Controllers
         [HttpPost]
         public IHttpActionResult RemoveToken(RemoveFireBaseTokenCommand command)
         {
+            if (command == null)
+            {
+                return BadRequest("No command");
+            }
+
             try
             {
                 FakedDi.GetPersonCommandHandler.Handle(command);
@@ -47,6 +54,7 @@ namespace Notifications.WebApi.Controllers
 
                 throw;
             }
+
             return Ok();
         }
     }

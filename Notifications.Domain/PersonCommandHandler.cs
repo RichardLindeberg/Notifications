@@ -18,6 +18,17 @@ namespace Notifications.Domain
 
         public void Handle(AddFireBaseTokenCommand command)
         {
+            if (command == null)
+            {
+                throw new ArgumentNullException(nameof(command));
+            }
+
+            if (string.IsNullOrEmpty(command.PersonalNumber) || string.IsNullOrEmpty(command.FirebaseToken)
+                || string.IsNullOrEmpty(command.NotificationTypeId))
+            {
+                throw new ArgumentException("Command is not valid, missing requeried parameters");
+            }
+
             if (_personalNumberAndTokenReadModell.TokenExistsOnOtherPersonalNumber(
                 command.PersonalNumber,
                 command.FirebaseToken))

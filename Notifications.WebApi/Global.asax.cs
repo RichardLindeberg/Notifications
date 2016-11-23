@@ -12,6 +12,7 @@ namespace Notifications.WebApi
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
+            var dummy = FakedDi.GetPersonCommandHandler;
         }
     }
 }
