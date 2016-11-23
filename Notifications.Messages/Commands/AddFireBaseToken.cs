@@ -8,11 +8,12 @@ namespace Notifications.Messages.Commands
 {
     public class AddFireBaseTokenCommand : IPersonCommand
     {
-        public AddFireBaseTokenCommand(string personalNumber, string firebaseToken, Guid commandId)
+        public AddFireBaseTokenCommand(string personalNumber, string firebaseToken, Guid commandId, string notificationTypeId)
         {
             PersonalNumber = personalNumber;
             FirebaseToken = firebaseToken;
             CommandId = commandId;
+            NotificationTypeId = notificationTypeId;
         }
 
         public Guid CommandId { get; set; }
@@ -20,5 +21,7 @@ namespace Notifications.Messages.Commands
         public string PersonalNumber { get; set; }
 
         public string FirebaseToken { get; set; }
+
+        public string NotificationTypeId { get; }
     }
 }

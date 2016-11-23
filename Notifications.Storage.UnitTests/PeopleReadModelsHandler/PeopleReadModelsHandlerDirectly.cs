@@ -1,10 +1,8 @@
-﻿using Notifications.Messages.Events.Person;
-
-namespace Notifications.Domain.UnitTests.PeopleReadModelsHandler
+﻿namespace Notifications.Storage.UnitTests.PeopleReadModelsHandler
 {
-    using Domain;
+    using Messages.Events.Person;
 
-    using Messages;
+    using Notifications.Domain;
 
     using NUnit.Framework;
 
@@ -13,13 +11,21 @@ namespace Notifications.Domain.UnitTests.PeopleReadModelsHandler
     [TestFixture]
     public class PeopleReadModelsHandlerDirectly
     {
+        private const string Token = "ABCDE";
+
+        private const string Token2 = "XYZ";
+
+        private const string Pno = "800412XXX";
+
+        private const string Not = "not1";
+
         [Test]
         public void Add()
         {
             var sut = new PersonalNumberAndTokenReadModell();
             sut.PeopleWithTokens.ShouldBeEmpty();
 
-            var addEvt = new FirebaseTokenAdded("800412XXXX", "ABCD");
+            var addEvt = new FirebaseTokenAdded(Pno, Token, Not);
             sut.Handle(addEvt);
             sut.PeopleWithTokens.ShouldNotBeEmpty();
         }
@@ -30,13 +36,12 @@ namespace Notifications.Domain.UnitTests.PeopleReadModelsHandler
             var sut = new PersonalNumberAndTokenReadModell();
             sut.PeopleWithTokens.ShouldBeEmpty();
 
-            var addEvt = new FirebaseTokenAdded("800412XXXX", "ABCD");
+            var addEvt = new FirebaseTokenAdded(Pno, Token, Not);
             sut.Handle(addEvt);
 
-            var removeEvt = new FirebaseTokenRemoved("800412XXXX", "ABCD");
+            var removeEvt = new FirebaseTokenRemoved(Pno, Token, Not);
             sut.Handle(removeEvt);
             sut.PeopleWithTokens.ShouldBeEmpty();
-
         }
 
         [Test]
@@ -45,14 +50,28 @@ namespace Notifications.Domain.UnitTests.PeopleReadModelsHandler
             var sut = new PersonalNumberAndTokenReadModell();
             sut.PeopleWithTokens.ShouldBeEmpty();
 
-            var addEvt = new FirebaseTokenAdded("800412XXXX", "ABCD");
-            var addEvt2 = new FirebaseTokenAdded("800412XXXX", "ABCDE");
+            var addEvt = new FirebaseTokenAdded(Pno, Token, Not);
+            var addEvt2 = new FirebaseTokenAdded(Pno, Token2, Not);
 
             sut.Handle(addEvt);
             sut.Handle(addEvt2);
 
             sut.PeopleWithTokens.Count.ShouldEqual(2);
+        }
 
+        [Test]
+        public void AddTwice()
+        {
+            var sut = new PersonalNumberAndTokenReadModell();
+            sut.PeopleWithTokens.ShouldBeEmpty();
+
+            var addEvt = new FirebaseTokenAdded(Pno, Token, Not);
+            var addEvt2 = new FirebaseTokenAdded(Pno, Token, Not);
+
+            sut.Handle(addEvt);
+            sut.Handle(addEvt2);
+
+            sut.PeopleWithTokens.Count.ShouldEqual(1);
         }
 
         [Test]
@@ -61,18 +80,17 @@ namespace Notifications.Domain.UnitTests.PeopleReadModelsHandler
             var sut = new PersonalNumberAndTokenReadModell();
             sut.PeopleWithTokens.ShouldBeEmpty();
 
-            var addEvt = new FirebaseTokenAdded("800412XXXX", "ABCD");
-            var addEvt2 = new FirebaseTokenAdded("800412XXXX", "ABCDE");
+            var addEvt = new FirebaseTokenAdded(Pno, Token, Not);
+            var addEvt2 = new FirebaseTokenAdded(Pno, Token2, Not);
 
             sut.Handle(addEvt);
             sut.Handle(addEvt2);
 
-            var removeEvt = new FirebaseTokenRemoved("800412XXXX", "ABCD");
+            var removeEvt = new FirebaseTokenRemoved(Pno, Token, Not);
             sut.Handle(removeEvt);
 
 
             sut.PeopleWithTokens.Count.ShouldEqual(1);
-
         }
     }
 }

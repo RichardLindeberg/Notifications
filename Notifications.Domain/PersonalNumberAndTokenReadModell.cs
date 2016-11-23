@@ -1,18 +1,15 @@
-using Notifications.Messages.Events;
-using Notifications.Messages.Events.Person;
-
 namespace Notifications.Domain
 {
-    using System.Collections.Concurrent;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Threading.Tasks;
 
-    using Messages;
+    using Messages.Events;
+    using Messages.Events.Person;
 
     public class PersonalNumberAndTokenReadModell
     {
         private readonly object _lockObject = new object();
+
         public PersonalNumberAndTokenReadModell()
         {
             PeopleWithTokens = new List<PersonWithToken>();
@@ -42,7 +39,7 @@ namespace Notifications.Domain
             {
                 lock (_lockObject)
                 {
-                    var pwt = new PersonWithToken(tokenAdded.PersonalNumber, tokenAdded.FirebaseToken);
+                    var pwt = new PersonWithToken(tokenAdded.PersonalNumber, tokenAdded.FirebaseToken, tokenAdded.NotificationTypeId);
                     if (PeopleWithTokens.Contains(pwt) == false)
                     {
                         PeopleWithTokens.Add(pwt);
@@ -60,7 +57,8 @@ namespace Notifications.Domain
                 {
                     var pwt = new PersonWithToken(
                         firebaseTokenRemoved.PersonalNumber,
-                        firebaseTokenRemoved.FirebaseToken);
+                        firebaseTokenRemoved.FirebaseToken, 
+                        firebaseTokenRemoved.NotificationTypeId);
                     PeopleWithTokens.Remove(pwt);
                 }
             }

@@ -2,8 +2,6 @@ namespace Notifications.Domain.UnitTests.Person
 {
     using System.Linq;
 
-    using Domain;
-
     using Moq;
 
     using Notifications.Messages.Events.Person;
@@ -12,8 +10,9 @@ namespace Notifications.Domain.UnitTests.Person
 
     using Should;
 
-    [TestFixture]
-    public class WhenAddingSendingMessageToOneToken
+    using Person = Notifications.Domain.Person;
+
+    public class WhenAddingSendingMessageToOneTokenAndFails
     {
         private const string Pno = "800412XXX";
 
@@ -32,7 +31,7 @@ namespace Notifications.Domain.UnitTests.Person
         {
             _firebaseSender = new Mock<IFirebaseNotificationSender>(MockBehavior.Strict);
             _firebaseSender.Setup(t => t.SendNotification(Token, MessageText))
-                .Returns(new FireBaseNotificationResponse(true, false, string.Empty));
+                .Returns(new FireBaseNotificationResponse(false, true, "Error message"));
             _sut = new Person(Pno, _firebaseSender.Object);
             _sut.AddToken(Token, Not);
             _sut.SendMessage("MessageId-1", MessageText, Not);
@@ -45,21 +44,21 @@ namespace Notifications.Domain.UnitTests.Person
         }
 
         [Test]
-        public void ShouldHaveMessageSentEvent()
+        public void ShouldHaveMessageSentFailedEvent()
         {
-            _sut.NewEvents.Any(t => t is SentFirebaseMessage).ShouldBeTrue();
+            _sut.NewEvents.Any(t => t is FailedToSendFirebaseMessage).ShouldBeTrue();
         }
 
         [Test]
         public void ShouldHaveSavedMessageTextInSentEvent()
         {
-            _sut.NewEvents.Any(t => (t is SentFirebaseMessage) && (string.CompareOrdinal(((SentFirebaseMessage)t).Message, MessageText) == 0)).ShouldBeTrue();
+            _sut.NewEvents.Any(t => (t is FailedToSendFirebaseMessage) && (string.CompareOrdinal(((FailedToSendFirebaseMessage)t).Message, MessageText) == 0)).ShouldBeTrue();
         }
 
         [Test]
-        public void ShouldHaveOneToken()
+        public void ShouldHaveNoToken()
         {
-            _sut.FirebaseTokenAndNotificationTypeIds.Count().ShouldEqual(1);
+            _sut.FirebaseTokenAndNotificationTypeIds.ShouldBeEmpty();
         }
     }
 }

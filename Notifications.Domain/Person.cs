@@ -1,36 +1,40 @@
-using Notifications.Messages.Events.Person;
-
 namespace Notifications.Domain
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Security.Cryptography.X509Certificates;
-
-    using Messages;
+    using Messages.Events.Person;
 
     public class Person
     {
         private readonly IFirebaseNotificationSender _firebaseNotificationSender;
 
-        private readonly List<string> _SentMessageIds;
+        private readonly List<string> _sentMessageIds;
 
         private readonly List<PersonEvent> _newEvents;
+
+        private readonly List<FirebaseTokenAndNotificationTypeId> _firebaseTokenAndNotificationTypeIds;
 
         public Person(string personalNumber, IFirebaseNotificationSender firebaseNotificationSender)
         {
             _firebaseNotificationSender = firebaseNotificationSender;
             _newEvents = new List<PersonEvent>();
-            _SentMessageIds = new List<string>();
+            _sentMessageIds = new List<string>();
             PersonalNumber = personalNumber;
-            FirebaseTokens = new List<string>();
+            _firebaseTokenAndNotificationTypeIds = new List<FirebaseTokenAndNotificationTypeId>();
         }
 
         public IEnumerable<PersonEvent> NewEvents => _newEvents;
 
         public string PersonalNumber { get; }
 
-        public List<string> FirebaseTokens { get; }
+        public IEnumerable<FirebaseTokenAndNotificationTypeId> FirebaseTokenAndNotificationTypeIds
+        {
+            get
+            {
+                return _firebaseTokenAndNotificationTypeIds;
+            }
+        }
 
         public void Apply(IEnumerable<PersonEvent> events)
         {
@@ -43,62 +47,73 @@ namespace Notifications.Domain
 
         public void Apply(FirebaseTokenAdded evt)
         {
-            if (FirebaseTokens.Contains(evt.FirebaseToken) == false)
+            var ft = new FirebaseTokenAndNotificationTypeId(evt.FirebaseToken, evt.NotificationTypeId);
+            if (_firebaseTokenAndNotificationTypeIds.Contains(ft) == false)
             {
-                FirebaseTokens.Add(evt.FirebaseToken);
+                _firebaseTokenAndNotificationTypeIds.Add(ft);
             }
         }
 
         public void Apply(FailedToSendFirebaseMessage evt)
         {
-            
         }
 
         public void Apply(SentFirebaseMessage evt)
         {
-            _SentMessageIds.Add(evt.MessageId);
+            _sentMessageIds.Add(evt.MessageId);
         }
 
         public void Apply(FirebaseTokenRemoved evt)
         {
-            FirebaseTokens.RemoveAll(t => t == evt.FirebaseToken);
+            var ft = new FirebaseTokenAndNotificationTypeId(evt.FirebaseToken, evt.NotificationTypeId);
+            _firebaseTokenAndNotificationTypeIds.RemoveAll(t => t.Equals(ft));
         }
 
-        public void AddToken(string fireBaseToke)
+        public void AddToken(string fireBaseToke, string notificationTypeId)
         {
-            if (FirebaseTokens.Contains(fireBaseToke) == false)
+            var ft = new FirebaseTokenAndNotificationTypeId(fireBaseToke, notificationTypeId);
+
+            if (_firebaseTokenAndNotificationTypeIds.Contains(ft) == false)
             {
-                var evt = new FirebaseTokenAdded(PersonalNumber, fireBaseToke);
+                var evt = new FirebaseTokenAdded(PersonalNumber, fireBaseToke, notificationTypeId);
                 Publish(evt);
             }
         }
 
-        public void RemoveToken(string fireBaseToken)
+        public void RemoveToken(string fireBaseToken, string notificationTypeId)
         {
-            if (FirebaseTokens.Contains(fireBaseToken))
+            var ft = new FirebaseTokenAndNotificationTypeId(fireBaseToken, notificationTypeId);
+            if (_firebaseTokenAndNotificationTypeIds.Contains(ft))
             {
-                var evt = new FirebaseTokenRemoved(PersonalNumber, fireBaseToken);
+                var evt = new FirebaseTokenRemoved(PersonalNumber, fireBaseToken, notificationTypeId);
                 Publish(evt);
             }
         }
 
-        public void SendMessage(string messageId, string message)
+        public void SendMessage(string messageId, string message, string notificationTypeId)
         {
-            var tokens = FirebaseTokens.ToList();
-            foreach (var firebaseToken in tokens)
+            if (_sentMessageIds.Contains(messageId))
             {
-                var response = _firebaseNotificationSender.SendNotification(firebaseToken, message);
+                // this is for duplicate send protection
+                return;
+            }
+
+            var fts = _firebaseTokenAndNotificationTypeIds.Where(t => t.NotificationTypeId == notificationTypeId).ToList();
+            foreach (var firebaseToken in fts)
+            {
+                var response = _firebaseNotificationSender.SendNotification(firebaseToken.FirebaseToken, message);
                 if (response.WasSent)
                 {
-                    var evt = new SentFirebaseMessage(PersonalNumber, messageId, message);
+                    var evt = new SentFirebaseMessage(PersonalNumber, messageId, message, notificationTypeId);
                     Publish(evt);
                 }
                 else
                 {
                     if (response.ShouldBeDeleted)
                     {
-                        RemoveToken(firebaseToken);
+                        RemoveToken(firebaseToken.FirebaseToken, firebaseToken.NotificationTypeId);
                     }
+
                     var evt = new FailedToSendFirebaseMessage(PersonalNumber, message, response.ErrorMessage);
                     Publish(evt);
                 }

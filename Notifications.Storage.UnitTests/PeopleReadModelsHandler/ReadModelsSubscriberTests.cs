@@ -6,14 +6,11 @@ namespace Notifications.Domain.UnitTests.PeopleReadModelsHandler
 
     using NEventStore;
 
-    using Notifications.Messages;
-    using Notifications.Storage;
+    using Storage;
 
     using NUnit.Framework;
 
     using Should;
-
-    using Notifications.Storage;
 
     [TestFixture]
     public class ReadModelsSubscriberTests
@@ -40,7 +37,7 @@ namespace Notifications.Domain.UnitTests.PeopleReadModelsHandler
             subscriber.Subscribe(readModelSubscriber, null, 10000);
 
             var stream = _store.CreateStream("TestStream");
-            stream.Add(new EventMessage() { Body = new FirebaseTokenAdded("800412XXXX", "ABCDE") });
+            stream.Add(new EventMessage() { Body = new FirebaseTokenAdded("800412XXXX", "ABCDE", "not1") });
             stream.CommitChanges(Guid.NewGuid());
 
         }
@@ -55,7 +52,7 @@ namespace Notifications.Domain.UnitTests.PeopleReadModelsHandler
         public void WhenAddingSameAgain()
         {
             var stream = _store.OpenStream("TestStream");
-            stream.Add(new EventMessage() { Body = new FirebaseTokenAdded("800412XXXX", "ABCDE") });
+            stream.Add(new EventMessage() { Body = new FirebaseTokenAdded("800412XXXX", "ABCDE", "not1") });
             stream.CommitChanges(Guid.NewGuid());
 
             _sut.PeopleWithTokens.Count.ShouldEqual(1);
@@ -65,7 +62,7 @@ namespace Notifications.Domain.UnitTests.PeopleReadModelsHandler
         public void WhenAddingAnotherPersonSameToken()
         {
             var stream = _store.OpenStream("TestStream");
-            stream.Add(new EventMessage() { Body = new FirebaseTokenAdded("800412XXXY", "ABCDE") });
+            stream.Add(new EventMessage() { Body = new FirebaseTokenAdded("800412XXXY", "ABCDE", "not1") });
             stream.CommitChanges(Guid.NewGuid());
 
             _sut.PeopleWithTokens.Count.ShouldEqual(2);
@@ -75,7 +72,7 @@ namespace Notifications.Domain.UnitTests.PeopleReadModelsHandler
         public void WhenAddingAnotherTokenSamePerson()
         {
             var stream = _store.OpenStream("TestStream");
-            stream.Add(new EventMessage() { Body = new FirebaseTokenAdded("800412XXXX", "ABCDEF") });
+            stream.Add(new EventMessage() { Body = new FirebaseTokenAdded("800412XXXX", "ABCDEF", "not1") });
             stream.CommitChanges(Guid.NewGuid());
 
             _sut.PeopleWithTokens.Count.ShouldEqual(2);
@@ -85,7 +82,7 @@ namespace Notifications.Domain.UnitTests.PeopleReadModelsHandler
         public void WhenRemoving()
         {
             var stream = _store.OpenStream("TestStream");
-            stream.Add(new EventMessage() { Body = new FirebaseTokenRemoved("800412XXXX", "ABCDE") });
+            stream.Add(new EventMessage() { Body = new FirebaseTokenRemoved("800412XXXX", "ABCDE", "not1") });
             stream.CommitChanges(Guid.NewGuid());
 
             _sut.PeopleWithTokens.Count.ShouldEqual(0);

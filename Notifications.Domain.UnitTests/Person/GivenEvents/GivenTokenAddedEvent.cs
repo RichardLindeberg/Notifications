@@ -1,10 +1,9 @@
-using Notifications.Messages.Events.Person;
-
-namespace Notifications.Domain.UnitTests.Person
+namespace Notifications.Domain.UnitTests.Person.GivenEvents
 {
     using System.Collections.Generic;
+    using System.Linq;
 
-    using Notifications.Messages;
+    using Messages.Events.Person;
 
     using NUnit.Framework;
 
@@ -13,33 +12,33 @@ namespace Notifications.Domain.UnitTests.Person
     [TestFixture]
     public class GivenTokenAddedEvent : PersonTestBase
     {
-        private string _token;
+        private const string Token = "ABCDE";
 
-        private string _pno;
+        private const string Pno = "800412XXX";
+
+        private const string Not = "not1";
 
         [OneTimeSetUp]
         public void TestFixtureSetup()
         {
-            _pno = "800412XXXX";
-            _token = "ABCDE";
-            CreateSut(_pno);            
+            CreateSut(Pno);            
         }
 
         public override IEnumerable<PersonEvent> GetEvents()
         {
-            yield return new FirebaseTokenAdded(_pno, _token);
+            yield return new FirebaseTokenAdded(Pno, Token, Not);
         }
 
         [Test]
         public void ShouldHaveOneToken()
         {
-            Sut.FirebaseTokens.Count.ShouldEqual(1);
+            Sut.FirebaseTokenAndNotificationTypeIds.Count().ShouldEqual(1);
         }
 
         [Test]
         public void ShouldHaveCorrectToke()
         {
-            Sut.FirebaseTokens.ShouldContain(_token);
+            Sut.FirebaseTokenAndNotificationTypeIds.ShouldContain(new FirebaseTokenAndNotificationTypeId(Token, Not));
         }
     }
 }

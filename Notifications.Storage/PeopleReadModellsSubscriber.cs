@@ -1,12 +1,12 @@
-using Notifications.Messages.Events;
-
-namespace Notifications.Domain
+namespace Notifications.Storage
 {
     using System;
 
-    using NEventStore;
+    using Domain;
 
-    using Notifications.Messages;
+    using Messages.Events;
+
+    using NEventStore;
 
     public class PeopleReadModellsSubscriber : IObserver<ICommit>
     {
@@ -36,7 +36,6 @@ namespace Notifications.Domain
 
         public void OnCompleted()
         {
-
         }
     }
 }

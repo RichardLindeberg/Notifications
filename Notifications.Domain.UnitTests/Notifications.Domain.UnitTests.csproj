@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="Person\WhenAddingSendingMessageToOneToken.cs" />
+    <Compile Include="Person\WhenAddingSendingMessageToOneTokenAndFails.cs" />
     <Compile Include="Person\WhenAddingToken.cs" />
     <Compile Include="Person\GivenEvents\PersonTestBase.cs" />
     <Compile Include="Person\GivenEvents\GivenTokenAddedEvent.cs" />

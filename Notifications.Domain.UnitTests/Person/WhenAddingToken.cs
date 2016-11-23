@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Notifications.Messages.Events.Person;
-
-namespace Notifications.Domain.UnitTests.Person
+﻿namespace Notifications.Domain.UnitTests.Person
 {
-    using NUnit.Framework;
+    using System.Linq;
 
     using Domain;
 
-    using Notifications.Messages;
+    using Notifications.Messages.Events.Person;
+
+    using NUnit.Framework;
 
     using Should;
 
@@ -22,25 +17,27 @@ namespace Notifications.Domain.UnitTests.Person
 
         private const string Token = "ABCDE";
 
+        private const string Not = "Not1";
+
         private Person _sut;
 
         [OneTimeSetUp]
         public void OneTimeSetup()
         {
             _sut = new Person(Pno, null);
-            _sut.AddToken(Token);
+            _sut.AddToken(Token, Not);
         }
 
         [Test]
         public void ShouldHaveOneToken()
         {
-            _sut.FirebaseTokens.Count.ShouldEqual(1);
+            _sut.FirebaseTokenAndNotificationTypeIds.Count().ShouldEqual(1);
         }
 
         [Test]
         public void ShouldHaveCorrectToken()
         {
-            _sut.FirebaseTokens.ShouldContain(Token);
+            _sut.FirebaseTokenAndNotificationTypeIds.ShouldContain(new FirebaseTokenAndNotificationTypeId(Token, Not));
         }
 
         [Test]

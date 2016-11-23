@@ -4,14 +4,20 @@ namespace Notifications.Domain
 
     public class PersonWithToken
     {
-        public PersonWithToken(string personalNumber, string token)
+        public PersonWithToken(string personalNumber, string token, string notificationTypeId)
         {
             PersonalNumber = personalNumber;
             Token = token;
+            NotificationTypeId = notificationTypeId;
         }
-        
 
-        private sealed class PersonalNumberTokenEqualityComparer : IEqualityComparer<PersonWithToken>
+        public string PersonalNumber { get; }
+
+        public string Token { get; }
+
+        public string NotificationTypeId { get; }
+
+        private sealed class PersonWithTokenEqualityComparer : IEqualityComparer<PersonWithToken>
         {
             public bool Equals(PersonWithToken x, PersonWithToken y)
             {
@@ -19,32 +25,34 @@ namespace Notifications.Domain
                 if (ReferenceEquals(x, null)) return false;
                 if (ReferenceEquals(y, null)) return false;
                 if (x.GetType() != y.GetType()) return false;
-                return string.Equals(x.PersonalNumber, y.PersonalNumber) && string.Equals(x.Token, y.Token);
+                return string.Equals(x.PersonalNumber, y.PersonalNumber) && string.Equals(x.Token, y.Token) && string.Equals(x.NotificationTypeId, y.NotificationTypeId);
             }
 
             public int GetHashCode(PersonWithToken obj)
             {
                 unchecked
                 {
-                    return ((obj.PersonalNumber != null ? obj.PersonalNumber.GetHashCode() : 0) * 397) ^ (obj.Token != null ? obj.Token.GetHashCode() : 0);
+                    var hashCode = (obj.PersonalNumber != null ? obj.PersonalNumber.GetHashCode() : 0);
+                    hashCode = (hashCode * 397) ^ (obj.Token != null ? obj.Token.GetHashCode() : 0);
+                    hashCode = (hashCode * 397) ^ (obj.NotificationTypeId != null ? obj.NotificationTypeId.GetHashCode() : 0);
+                    return hashCode;
                 }
             }
         }
 
+        private static readonly IEqualityComparer<PersonWithToken> PersonWithTokenComparerInstance = new PersonWithTokenEqualityComparer();
 
-        private static readonly IEqualityComparer<PersonWithToken> PersonalNumberTokenComparerInstance = new PersonalNumberTokenEqualityComparer();
-
-        public static IEqualityComparer<PersonWithToken> PersonalNumberTokenComparer
+        public static IEqualityComparer<PersonWithToken> PersonWithTokenComparer
         {
             get
             {
-                return PersonalNumberTokenComparerInstance;
+                return PersonWithTokenComparerInstance;
             }
         }
 
         protected bool Equals(PersonWithToken other)
         {
-            return string.Equals(PersonalNumber, other.PersonalNumber) && string.Equals(Token, other.Token);
+            return string.Equals(PersonalNumber, other.PersonalNumber) && string.Equals(Token, other.Token) && string.Equals(NotificationTypeId, other.NotificationTypeId);
         }
 
         public override bool Equals(object obj)
@@ -59,12 +67,11 @@ namespace Notifications.Domain
         {
             unchecked
             {
-                return ((PersonalNumber != null ? PersonalNumber.GetHashCode() : 0) * 397) ^ (Token != null ? Token.GetHashCode() : 0);
+                var hashCode = (PersonalNumber != null ? PersonalNumber.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (Token != null ? Token.GetHashCode() : 0);
+                hashCode = (hashCode * 397) ^ (NotificationTypeId != null ? NotificationTypeId.GetHashCode() : 0);
+                return hashCode;
             }
         }
-
-        public string PersonalNumber { get; }
-
-        public string Token { get; }
     }
 }
