@@ -1,4 +1,6 @@
-﻿namespace Notifications.Domain.UnitTests.Person
+﻿using Notifications.Messages.Events.Person;
+
+namespace Notifications.Domain.UnitTests.Person
 {
     using System.Collections.Generic;
 

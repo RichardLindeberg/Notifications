@@ -1,4 +1,6 @@
-﻿namespace Notifications.Domain.UnitTests.PeopleReadModelsHandler
+﻿using Notifications.Messages.Events.Person;
+
+namespace Notifications.Domain.UnitTests.PeopleReadModelsHandler
 {
     using Domain;
 

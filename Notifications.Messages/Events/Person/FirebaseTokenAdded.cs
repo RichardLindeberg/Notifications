@@ -1,4 +1,4 @@
-namespace Notifications.Messages
+namespace Notifications.Messages.Events.Person
 {
     public class FirebaseTokenAdded : PersonEvent
     {

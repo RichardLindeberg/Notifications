@@ -1,10 +1,11 @@
-namespace Notifications.Storage
+using Notifications.Messages.Events;
+
+namespace Notifications.Domain
 {
     using System;
 
     using NEventStore;
 
-    using Notifications.Domain;
     using Notifications.Messages;
 
     public class PeopleReadModellsSubscriber : IObserver<ICommit>

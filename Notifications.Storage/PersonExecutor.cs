@@ -1,4 +1,6 @@
-﻿namespace Notifications.Storage
+﻿using Notifications.Messages.Events.Person;
+
+namespace Notifications.Storage
 {
     using System;
     using System.Linq;
