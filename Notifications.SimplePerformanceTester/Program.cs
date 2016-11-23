@@ -17,7 +17,7 @@
         public static void Main(string[] args)
         {
             Console.WriteLine("warm up");
-            var max = 10000;
+            var max = 5000;
             var ints = new List<int>(max);
             for (int i = 0; i < max; i++)
             {
@@ -29,6 +29,9 @@
             swStartup.Stop();
             var sw = new Stopwatch();
             Console.WriteLine("Warmup took " + swStartup.Elapsed + " or " + swStartup.ElapsedMilliseconds + "ms");
+            Console.WriteLine(
+                " there are " + FakedDi.PersonalNumberAndTokenReadModell.PeopleWithTokens.Count
+                + " people loaded in read modell");
             Console.WriteLine("Will add some data to database..");
             sw.Start();
             Parallel.ForEach(
@@ -43,7 +46,15 @@
                     });
             sw.Stop();  
             Console.WriteLine("Testing done.. it took " + sw.Elapsed + " or " + sw.ElapsedMilliseconds + " milliseconds to add " + max + " people with three notifications each, startup was " + swStartup.ElapsedMilliseconds);
+            Console.WriteLine(
+                " there are " + FakedDi.PersonalNumberAndTokenReadModell.PeopleWithTokens.Count
+                + " people loaded in read modell");
+            Console.WriteLine("Press enter to get new count");
             Console.ReadLine();
+            Console.WriteLine(
+                " there are " + FakedDi.PersonalNumberAndTokenReadModell.PeopleWithTokens.Count
+                + " people loaded in read modell");
+
         }
 
         private static IEnumerable<AddFireBaseTokenCommand> GetRandomAddCommands()
