@@ -8,27 +8,32 @@ namespace Notifications.Domain
     using Messages.Events;
     using Messages.Events.Person;
 
-    public class PersonalNumberAndTokenReadModell
+    public interface IReadModell
     {
-        private readonly object _lockObject = new object();
+        void Handle(Event evt);
+    }
 
+    public class PersonalNumberAndTokenReadModell : IReadModell
+    {
         public PersonalNumberAndTokenReadModell()
         {
-            PeopleWithTokens = new ConcurrentDictionary<PersonWithToken, PersonWithToken>();
             FirebaseTokensAndListOfPople = new ConcurrentDictionary<string, List<string>>();
         }
 
-        public ConcurrentDictionary<PersonWithToken, PersonWithToken> PeopleWithTokens { get; }
+        private ConcurrentDictionary<string, List<string>> FirebaseTokensAndListOfPople { get; }
 
-        public ConcurrentDictionary<string, List<string>> FirebaseTokensAndListOfPople { get; }
+        public List<string> PersonalNumberWithThisToken(string firebaseToken)
+        {
+            List<string> pnos;
+            if (FirebaseTokensAndListOfPople.TryGetValue(firebaseToken, out pnos))
+            {
+                return pnos;
+            }
+            return new List<string>();
+        }
 
         public bool TokenExistsOnOtherPersonalNumber(string personalNumber, string firebaseToken)
         {
-            //lock (_lockObject)
-            //{
-            //    var people = PeopleWithTokens.Where(t => t.Value.Token == firebaseToken);
-            //    return people.Any(t => t.Value.PersonalNumber != personalNumber);
-            //}
             List<string> pnos;
             if (FirebaseTokensAndListOfPople.TryGetValue(firebaseToken, out pnos))
             {
@@ -48,27 +53,19 @@ namespace Notifications.Domain
             var tokenAdded = evt as FirebaseTokenAdded;
             if (tokenAdded != null)
             {
-                //lock (_lockObject)
-                {
-                    var pwt = new PersonWithToken(tokenAdded.PersonalNumber, tokenAdded.FirebaseToken, tokenAdded.NotificationTypeId);
-                    //if (PeopleWithTokens.ContainsKey(pwt) == false)
-                    {
-                        PeopleWithTokens.TryAdd(pwt, pwt);
-                    }
-                }
-                List<string> pnos;
-                if (FirebaseTokensAndListOfPople.TryGetValue(tokenAdded.FirebaseToken, out pnos))
-                {
-                    if (pnos.Contains(tokenAdded.PersonalNumber) == false)
-                    {
-                        var newPnos = pnos.ToList();
-                        newPnos.Add(tokenAdded.PersonalNumber);
-                        if (FirebaseTokensAndListOfPople.TryUpdate(tokenAdded.FirebaseToken, newPnos, pnos) == false)
+                List<string> pnos = new List<string>() { tokenAdded.PersonalNumber };
+                
+                FirebaseTokensAndListOfPople.AddOrUpdate(
+                    tokenAdded.FirebaseToken,
+                    pnos,
+                    (key, existingValue) =>
                         {
-                            throw new InvalidOperationException("Kabom - concurrency exception");
-                        }
-                    }
-                }
+                            if (existingValue.Contains(tokenAdded.PersonalNumber) == false)
+                            {
+                                existingValue.Add(tokenAdded.PersonalNumber);
+                            }
+                            return existingValue;
+                        });
             }
         }
 
@@ -77,19 +74,10 @@ namespace Notifications.Domain
             var firebaseTokenRemoved = evt as FirebaseTokenRemoved;
             if (firebaseTokenRemoved != null)
             {
-                //lock (_lockObject)
-                {
-                    PersonWithToken outPwt;
-                    var pwt = new PersonWithToken(
-                        firebaseTokenRemoved.PersonalNumber,
-                        firebaseTokenRemoved.FirebaseToken, 
-                        firebaseTokenRemoved.NotificationTypeId);
-                    PeopleWithTokens.TryRemove(pwt, out outPwt);
-                }
                 List<string> pnos;
                 if (FirebaseTokensAndListOfPople.TryGetValue(firebaseTokenRemoved.FirebaseToken, out pnos))
                 {
-                    if (pnos.Contains(firebaseTokenRemoved.PersonalNumber) == false)
+                    if (pnos.Contains(firebaseTokenRemoved.PersonalNumber))
                     {
                         var newPnos = pnos.ToList();
                         newPnos.Remove(firebaseTokenRemoved.PersonalNumber);

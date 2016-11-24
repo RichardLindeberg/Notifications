@@ -8,11 +8,11 @@ namespace Notifications.Storage
 
     using NEventStore;
 
-    public class PeopleReadModellsSubscriber : IObserver<ICommit>
+    public class ReadModellSubscriber : IObserver<ICommit>
     {
-        private readonly PersonalNumberAndTokenReadModell _readModell;
+        private readonly IReadModell _readModell;
 
-        public PeopleReadModellsSubscriber(PersonalNumberAndTokenReadModell readModell)
+        public ReadModellSubscriber(IReadModell readModell)
         {
             _readModell = readModell;
         }

@@ -22,7 +22,7 @@
         [Test]
         public void Add()
         {
-            var sut = new PersonalNumberAndTokenReadModell();
+            var sut = new PeopleReadModell();
             sut.PeopleWithTokens.ShouldBeEmpty();
 
             var addEvt = new FirebaseTokenAdded(Pno, Token, Not);
@@ -33,7 +33,7 @@
         [Test]
         public void AddRemove()
         {
-            var sut = new PersonalNumberAndTokenReadModell();
+            var sut = new PeopleReadModell();
             sut.PeopleWithTokens.ShouldBeEmpty();
 
             var addEvt = new FirebaseTokenAdded(Pno, Token, Not);
@@ -47,7 +47,7 @@
         [Test]
         public void AddToTokensSamePnr()
         {
-            var sut = new PersonalNumberAndTokenReadModell();
+            var sut = new PeopleReadModell();
             sut.PeopleWithTokens.ShouldBeEmpty();
 
             var addEvt = new FirebaseTokenAdded(Pno, Token, Not);
@@ -62,7 +62,7 @@
         [Test]
         public void AddTwice()
         {
-            var sut = new PersonalNumberAndTokenReadModell();
+            var sut = new PeopleReadModell();
             sut.PeopleWithTokens.ShouldBeEmpty();
 
             var addEvt = new FirebaseTokenAdded(Pno, Token, Not);
@@ -77,7 +77,7 @@
         [Test]
         public void AddToTokensSamePnrRemoveOne()
         {
-            var sut = new PersonalNumberAndTokenReadModell();
+            var sut = new PeopleReadModell();
             sut.PeopleWithTokens.ShouldBeEmpty();
 
             var addEvt = new FirebaseTokenAdded(Pno, Token, Not);
