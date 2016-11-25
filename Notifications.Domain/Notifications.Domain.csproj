@@ -52,6 +52,7 @@
     <Compile Include="FireBaseNotificationResponse.cs" />
     <Compile Include="FirebaseTokenAndNotificationTypeId.cs" />
     <Compile Include="IFirebaseNotificationSender.cs" />
+    <Compile Include="PeopleReadModell.cs" />
     <Compile Include="PersonalNumberAndTokenReadModell.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="PersonCommandHandler.cs" />

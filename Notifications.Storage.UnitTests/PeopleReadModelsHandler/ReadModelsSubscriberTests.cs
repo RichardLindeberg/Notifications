@@ -19,7 +19,7 @@ namespace Notifications.Domain.UnitTests.PeopleReadModelsHandler
 
         private IStoreEvents _store;
 
-        private PersonalNumberAndTokenReadModell _sut;
+        private PeopleReadModell _sut;
 
         [SetUp]
         public void SetUp()
@@ -31,10 +31,9 @@ namespace Notifications.Domain.UnitTests.PeopleReadModelsHandler
                 .HookIntoPipelineUsing(_pipeLineHook)
                 .Build();
 
-            var subscriber = new EventStoreSubscriber(_store, _pipeLineHook);
-            _sut = new PersonalNumberAndTokenReadModell();
-            var readModelSubscriber = new PeopleReadModellsSubscriber(_sut);
-            subscriber.Subscribe(readModelSubscriber, null, 10000);
+            var subscriber = new EventstoreSubscriptionFactory(_store, _pipeLineHook);
+            _sut = new PeopleReadModell();
+            subscriber.CreateSubscription(_sut, null, 10000);
 
             var stream = _store.CreateStream("TestStream");
             stream.Add(new EventMessage() { Body = new FirebaseTokenAdded("800412XXXX", "ABCDE", "not1") });

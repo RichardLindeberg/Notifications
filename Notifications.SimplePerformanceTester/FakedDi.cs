@@ -15,7 +15,9 @@ namespace Notifications.SimplePerformanceTester
 
         private static PersonalNumberAndTokenReadModell personalNumberAndTokenReadModell;
 
-        private static EventStoreSubscriber eventStoreSubscriber;
+        private static PeopleReadModell peopleReadModell;
+
+        private static EventstoreSubscriptionFactory eventstoreSubscriptionFactory;
 
         private static PersonExecutor personExecutor;
 
@@ -32,6 +34,18 @@ namespace Notifications.SimplePerformanceTester
                     SetUp();
                 }
                 return personCommandHandler;
+            }
+        }
+
+        public static PeopleReadModell PeopleReadModell
+        {
+            get
+            {
+                if (isReady == false)
+                {
+                    SetUp();
+                }
+                return peopleReadModell;
             }
         }
 
@@ -54,11 +68,11 @@ namespace Notifications.SimplePerformanceTester
                 pipleLineHook = new PipeLineHook();
                 store = new EventStoreFactory(pipleLineHook).GetStore();
                 personalNumberAndTokenReadModell = new PersonalNumberAndTokenReadModell();
-                PeopleReadModellsSubscriber peopleReadModellsSubscriber =
-                    new PeopleReadModellsSubscriber(personalNumberAndTokenReadModell);
-                eventStoreSubscriber = new EventStoreSubscriber(store, pipleLineHook);
-                eventStoreSubscriber.Subscribe(peopleReadModellsSubscriber);
+                peopleReadModell = new PeopleReadModell();
 
+                eventstoreSubscriptionFactory = new EventstoreSubscriptionFactory(store, pipleLineHook);
+                eventstoreSubscriptionFactory.CreateSubscription(personalNumberAndTokenReadModell);
+                eventstoreSubscriptionFactory.CreateSubscription(peopleReadModell);
                 personExecutor = new PersonExecutor(store, null);
                 personCommandHandler = new PersonCommandHandler(personExecutor, personalNumberAndTokenReadModell);
                 isReady = true;

@@ -56,7 +56,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="PersonalNumberAndTokenReadModellTests.cs" />
     <Compile Include="Person\WhenAddingSendingMessageToOneToken.cs" />
     <Compile Include="Person\WhenAddingSendingMessageToOneTokenAndFails.cs" />
     <Compile Include="Person\WhenAddingToken.cs" />

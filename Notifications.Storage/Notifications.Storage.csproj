@@ -50,10 +50,10 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="EventStoreFactory.cs" />
-    <Compile Include="EventStoreSubscriber.cs" />
+    <Compile Include="EventstoreSubscriptionFactory.cs" />
     <Compile Include="IPipeLineHook.cs" />
     <Compile Include="ObserverForPollingClient.cs" />
-    <Compile Include="PeopleReadModellsSubscriber.cs" />
+    <Compile Include="ReadModellSubscriber.cs" />
     <Compile Include="PersonExecutor.cs" />
     <Compile Include="PipeLineHook.cs" />
     <Compile Include="PollingHook.cs" />

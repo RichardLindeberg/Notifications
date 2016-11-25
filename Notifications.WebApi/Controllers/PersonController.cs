@@ -12,7 +12,7 @@
         [HttpGet]
         public IHttpActionResult Get()
         {
-            return Content(HttpStatusCode.Found, FakedDi.PersonalNumberAndTokenReadModell.PeopleWithTokens);
+            return Content(HttpStatusCode.Found, FakedDi.PeopleReadModell.PeopleWithTokens);
         }
 
         [Route("Person/AddToken")]
