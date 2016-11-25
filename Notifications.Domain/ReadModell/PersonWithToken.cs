@@ -1,7 +1,7 @@
-namespace Notifications.Domain
-{
-    using System.Collections.Generic;
+using System.Collections.Generic;
 
+namespace Notifications.Domain.ReadModell
+{
     public class PersonWithToken
     {
         public PersonWithToken(string personalNumber, string token, string notificationTypeId)

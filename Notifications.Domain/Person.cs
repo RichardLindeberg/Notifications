@@ -1,3 +1,5 @@
+using Notifications.Domain.NotificationSender;
+
 namespace Notifications.Domain
 {
     using System;

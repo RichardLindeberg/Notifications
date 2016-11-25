@@ -1,4 +1,6 @@
-﻿namespace Notifications.WebApi
+﻿using Notifications.Domain.ReadModell;
+
+namespace Notifications.WebApi
 {
     using NEventStore;
 

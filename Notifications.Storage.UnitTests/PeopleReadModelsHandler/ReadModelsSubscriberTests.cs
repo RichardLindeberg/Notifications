@@ -1,3 +1,4 @@
+using Notifications.Domain.ReadModell;
 using Notifications.Messages.Events.Person;
 
 namespace Notifications.Domain.UnitTests.PeopleReadModelsHandler

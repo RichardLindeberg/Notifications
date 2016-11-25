@@ -1,13 +1,12 @@
-namespace Notifications.Domain
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
+using Notifications.Messages.Events;
+using Notifications.Messages.Events.Person;
+
+namespace Notifications.Domain.ReadModell
 {
-    using System;
-    using System.Collections.Concurrent;
-    using System.Collections.Generic;
-    using System.Linq;
-
-    using Messages.Events;
-    using Messages.Events.Person;
-
     public interface IReadModell
     {
         void Handle(Event evt);

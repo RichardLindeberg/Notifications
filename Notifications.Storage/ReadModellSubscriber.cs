@@ -1,3 +1,5 @@
+using Notifications.Domain.ReadModell;
+
 namespace Notifications.Storage
 {
     using System;

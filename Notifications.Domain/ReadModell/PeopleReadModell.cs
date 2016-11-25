@@ -1,10 +1,9 @@
-namespace Notifications.Domain
+using System.Collections.Concurrent;
+using Notifications.Messages.Events;
+using Notifications.Messages.Events.Person;
+
+namespace Notifications.Domain.ReadModell
 {
-    using System.Collections.Concurrent;
-
-    using Notifications.Messages.Events;
-    using Notifications.Messages.Events.Person;
-
     public class PeopleReadModell : IReadModell
     {
         public PeopleReadModell()

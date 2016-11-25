@@ -49,15 +49,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BadEventInStreamException.cs" />
-    <Compile Include="FireBaseNotificationResponse.cs" />
+    <Compile Include="NotificationSender\FireBaseNotificationResponse.cs" />
     <Compile Include="FirebaseTokenAndNotificationTypeId.cs" />
-    <Compile Include="IFirebaseNotificationSender.cs" />
-    <Compile Include="PeopleReadModell.cs" />
-    <Compile Include="PersonalNumberAndTokenReadModell.cs" />
+    <Compile Include="NotificationSender\IFirebaseNotificationSender.cs" />
+    <Compile Include="ReadModell\PeopleReadModell.cs" />
+    <Compile Include="ReadModell\PersonalNumberAndTokenReadModell.cs" />
     <Compile Include="Person.cs" />
     <Compile Include="PersonCommandHandler.cs" />
     <Compile Include="IPersonExecutor.cs" />
-    <Compile Include="PersonWithToken.cs" />
+    <Compile Include="ReadModell\PersonWithToken.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

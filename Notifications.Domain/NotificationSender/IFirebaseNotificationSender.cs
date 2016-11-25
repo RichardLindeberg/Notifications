@@ -4,7 +4,7 @@ using System.Net;
 using System.Text;
 using Newtonsoft.Json;
 
-namespace Notifications.Domain
+namespace Notifications.Domain.NotificationSender
 {
     public interface IFirebaseNotificationSender
     {

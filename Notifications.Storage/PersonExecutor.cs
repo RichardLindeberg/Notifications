@@ -1,4 +1,5 @@
-﻿using Notifications.Messages.Events.Person;
+﻿using Notifications.Domain.NotificationSender;
+using Notifications.Messages.Events.Person;
 
 namespace Notifications.Storage
 {

@@ -1,3 +1,5 @@
+using Notifications.Domain.ReadModell;
+
 namespace Notifications.Domain
 {
     using System;
@@ -33,7 +35,9 @@ namespace Notifications.Domain
                 command.PersonalNumber,
                 command.FirebaseToken))
             {
+                //_personExecutor.Execute("1234", person => person.RemoveToken(), Guid.NewGuid());
                 throw new InvalidOperationException("Token already used by other person");
+
             }
             _personExecutor.Execute(command.PersonalNumber, p => p.AddToken(command.FirebaseToken, command.NotificationTypeId), command.CommandId);
         }
