@@ -13,6 +13,7 @@ namespace Notifications.Domain.UnitTests.PipeLineHook
 
     using Notifications.Domain.ReadModell;
     using Notifications.Storage;
+    using Notifications.Storage.ReadModells;
 
     using NUnit.Framework;
 
@@ -25,7 +26,7 @@ namespace Notifications.Domain.UnitTests.PipeLineHook
 
         private IStoreEvents _store;
 
-        private PeopleReadModell _readModell;
+        private Mock<IReadModellWriter> _readModell;
 
         [OneTimeSetUp]
         protected void Setup()
@@ -39,9 +40,9 @@ namespace Notifications.Domain.UnitTests.PipeLineHook
 
             var esf = new EventstoreSubscriptionFactory(_store, pipeLineHook);
 
-            _readModell = new PeopleReadModell();
+            _readModell = new Mock<IReadModellWriter>();
 
-            esf.CreateSubscription(_readModell);
+            esf.CreateSubscription(_readModell.Object);
 
             var personExecutor = new PersonExecutor(_store, null);
             personExecutor.Execute("8004120351", person => person.AddToken("token", "not"), Guid.NewGuid());
@@ -51,8 +52,7 @@ namespace Notifications.Domain.UnitTests.PipeLineHook
         [Test]
         public void ShouldHaveOneToken()
         {
-            
-            _readModell.PeopleWithTokens.ShouldBeEmpty();
+            _readModell.Verify(rm => rm.NewEvent(It.IsAny<FirebaseTokenAdded>(), It.IsAny<string>()), Times.Once);
         }
 
         [Test]
@@ -60,9 +60,9 @@ namespace Notifications.Domain.UnitTests.PipeLineHook
         {
 
             var personExecutor = new PersonExecutor(_store, null);
-            personExecutor.Execute("8004120351", person => person.AddToken("token", "not2"), Guid.NewGuid());
+            personExecutor.Execute("8004120351", person => person.RemoveToken("token", "not"), Guid.NewGuid());
             Thread.Sleep(100);
-            _readModell.PeopleWithTokens.Count.ShouldEqual(2);
+            _readModell.Verify(rm => rm.NewEvent(It.IsAny<FirebaseTokenRemoved>(), It.IsAny<string>()), Times.Once);
         }
 
     }

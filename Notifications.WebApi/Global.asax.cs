@@ -7,12 +7,14 @@ using System.Web.Routing;
 
 namespace Notifications.WebApi
 {
+    using Notifications.Storage;
+
     public class WebApiApplication : System.Web.HttpApplication
     {
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
-            var dummy = FakedDi.GetPersonCommandHandler;
+            
         }
     }
 }

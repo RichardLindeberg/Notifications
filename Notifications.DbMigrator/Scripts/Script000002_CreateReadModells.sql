@@ -73,7 +73,7 @@ SELECT TOP (1000) [RowID]
       ,[PersonalNumber]
       ,[FireBaskeToken]
       ,[NotificationTypeId]
-  FROM [DbUpTesting].[dbo].[AllTokens_ReadModell]
+  FROM [dbo].[AllTokens_ReadModell]
   WHERE FireBaskeToken = @FireBaseToken
 END
 
@@ -121,3 +121,27 @@ COMMIT TRAN
 EXEC CleanAllTokens_ReadModell_Commits
 END
 
+GO
+
+CREATE PROCEDURE AllTokens_ReadModell_LastCommitId AS 
+SELECT TOP 1 CommitId FROM AllTokens_ReadModell_Commits ORDER BY Id DESC
+GO
+CREATE PROCEDURE [dbo].[AllTokens_ReadModell_ByPersonalNumber] @PersonalNumber varchar(12) AS 
+BEGIN
+SELECT TOP (1000) [RowID]
+      ,[PersonalNumber]
+      ,[FireBaskeToken]
+      ,[NotificationTypeId]
+  FROM [dbo].[AllTokens_ReadModell]
+  WHERE PersonalNumber = @PersonalNumber
+END
+
+GO
+CREATE PROCEDURE [dbo].[AllTokens_ReadModell_GetAll] AS 
+BEGIN
+SELECT TOP (1000) [RowID]
+      ,[PersonalNumber]
+      ,[FireBaskeToken]
+      ,[NotificationTypeId]
+  FROM [dbo].[AllTokens_ReadModell]
+END

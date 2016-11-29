@@ -10,13 +10,15 @@ namespace Notifications.Storage
 
     using NEventStore;
 
+    using Notifications.Storage.ReadModells;
+
     public class ReadModellSubscriber : IObserver<ICommit>
     {
-        private readonly IReadModell _readModell;
+        private readonly IReadModellWriter _readModellWriter;
 
-        public ReadModellSubscriber(IReadModell readModell)
+        public ReadModellSubscriber(IReadModellWriter readModellWriter)
         {
-            _readModell = readModell;
+            _readModellWriter = readModellWriter;
         }
 
         public void OnNext(ICommit commit)
@@ -26,7 +28,7 @@ namespace Notifications.Storage
                 var eventToApply = evt.Body as Event;
                 if (eventToApply != null)
                 {
-                    _readModell.Handle(eventToApply);
+                    _readModellWriter.NewEvent(eventToApply, commit.CommitId.ToString());
                 }
             }
         }

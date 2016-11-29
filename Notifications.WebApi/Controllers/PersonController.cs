@@ -7,6 +7,7 @@
     using Messages.Commands;
 
     using Notifications.Domain.ReadModell;
+    using Notifications.Storage;
 
     public class AddFireBaseTokenController : ApiController
     {
@@ -61,14 +62,14 @@
         [HttpGet]
         public IHttpActionResult Get()
         {
-            return Content(HttpStatusCode.Found, FakedDi.PeopleReadModell.PeopleWithTokens.Values);
+            return Content(HttpStatusCode.Found, FakedDi.PersonalNumberAndTokenReadModell.GetAll());
         }
 
         [Route("Person/{personalNumber}")]
         [HttpGet]
         public IHttpActionResult Get(string personalNumber)
         {
-            return Content(HttpStatusCode.Found, FakedDi.PeopleReadModell.PeopleWithTokens[new PersonWithToken("", "", "")]);
+            return Content(HttpStatusCode.Found, FakedDi.PersonalNumberAndTokenReadModell.GetPerson(personalNumber));
         }
 
 

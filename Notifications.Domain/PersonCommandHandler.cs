@@ -10,9 +10,9 @@ namespace Notifications.Domain
     {
         private readonly IPersonExecutor _personExecutor;
 
-        private readonly PersonalNumberAndTokenReadModell _personalNumberAndTokenReadModell;
+        private readonly IPersonalNumberAndTokenReadModell _personalNumberAndTokenReadModell;
 
-        public PersonCommandHandler(IPersonExecutor personExecutor, PersonalNumberAndTokenReadModell personalNumberAndTokenReadModell )
+        public PersonCommandHandler(IPersonExecutor personExecutor, IPersonalNumberAndTokenReadModell personalNumberAndTokenReadModell )
         {
             _personExecutor = personExecutor;
             _personalNumberAndTokenReadModell = personalNumberAndTokenReadModell;
@@ -31,14 +31,14 @@ namespace Notifications.Domain
                 throw new ArgumentException("Command is not valid, missing requeried parameters");
             }
 
-            if (_personalNumberAndTokenReadModell.TokenExistsOnOtherPersonalNumber(
-                command.PersonalNumber,
-                command.FirebaseToken))
-            {
-                //_personExecutor.Execute("1234", person => person.RemoveToken(), Guid.NewGuid());
-                throw new InvalidOperationException("Token already used by other person");
+            //if (_personalNumberAndTokenReadModell.TokenExistsOnOtherPersonalNumber(
+            //    command.PersonalNumber,
+            //    command.FirebaseToken))
+            //{
+            //    //_personExecutor.Execute("1234", person => person.RemoveToken(), Guid.NewGuid());
+            //    throw new InvalidOperationException("Token already used by other person");
 
-            }
+            //}
             _personExecutor.Execute(command.PersonalNumber, p => p.AddToken(command.FirebaseToken, command.NotificationTypeId), command.CommandId);
         }
 

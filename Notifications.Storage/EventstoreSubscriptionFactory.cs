@@ -8,6 +8,7 @@ namespace Notifications.Storage
     using NEventStore.Client;
 
     using Notifications.Domain;
+    using Notifications.Storage.ReadModells;
 
     public class EventstoreSubscriptionFactory
     {
@@ -21,10 +22,10 @@ namespace Notifications.Storage
             _pipeLineHook = pipeLineHook;
         }
 
-        public void CreateSubscription(IReadModell readModell, string startAtCommit = null, int interval = 5000)
+        public void CreateSubscription(IReadModellWriter readModellWriter, int interval = 5000)
         {
-            ReadModellSubscriber readModellSubscriber = new ReadModellSubscriber(readModell);
-            StartSubscribing(readModellSubscriber, startAtCommit, interval);
+            ReadModellSubscriber readModellSubscriber = new ReadModellSubscriber(readModellWriter);
+            StartSubscribing(readModellSubscriber, readModellWriter.GetLastCommit(), interval);
         }
 
         private void StartSubscribing(IObserver<ICommit> observer, string startAtCommit = null, int interval = 5000)

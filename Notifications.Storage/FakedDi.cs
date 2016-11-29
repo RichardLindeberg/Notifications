@@ -1,11 +1,13 @@
-﻿using Notifications.Domain.ReadModell;
-
-namespace Notifications.WebApi
+namespace Notifications.Storage
 {
+    using System;
+    using System.Configuration;
+
     using NEventStore;
 
     using Notifications.Domain;
-    using Notifications.Storage;
+    using Notifications.Domain.ReadModell;
+    using Notifications.Storage.ReadModells;
 
     public static class FakedDi
     {
@@ -15,10 +17,6 @@ namespace Notifications.WebApi
 
         private static IStoreEvents store;
 
-        private static PersonalNumberAndTokenReadModell personalNumberAndTokenReadModell;
-
-        private static PeopleReadModell peopleReadModell;
-
         private static EventstoreSubscriptionFactory eventstoreSubscriptionFactory;
 
         private static PersonExecutor personExecutor;
@@ -26,6 +24,8 @@ namespace Notifications.WebApi
         private static bool isReady = false;
 
         private static PersonCommandHandler personCommandHandler;
+
+        private static IPersonalNumberAndTokenReadModell personalNumberAndTokenReadModell;
 
         public static PersonCommandHandler GetPersonCommandHandler
         {
@@ -39,19 +39,7 @@ namespace Notifications.WebApi
             }
         }
 
-        public static PeopleReadModell PeopleReadModell
-        {
-            get
-            {
-                if (isReady == false)
-                {
-                    SetUp();
-                }
-                return peopleReadModell;
-            }
-        }
-
-        public static PersonalNumberAndTokenReadModell PersonalNumberAndTokenReadModell
+        public static IPersonalNumberAndTokenReadModell PersonalNumberAndTokenReadModell
         {
             get
             {
@@ -67,16 +55,20 @@ namespace Notifications.WebApi
         {
             lock (LockObject)
             {
+                var sqlConStr = ConfigurationManager.ConnectionStrings["Notifications"].ConnectionString;
+                
                 pipleLineHook = new PipeLineHook();
                 store = new EventStoreFactory(pipleLineHook).GetStore();
-                personalNumberAndTokenReadModell = new PersonalNumberAndTokenReadModell();
-                peopleReadModell = new PeopleReadModell();
+                var allTokensReadModellWriter = new AllTokensReadModellWriterWriter(sqlConStr);
+                
 
                 eventstoreSubscriptionFactory = new EventstoreSubscriptionFactory(store, pipleLineHook);
-                eventstoreSubscriptionFactory.CreateSubscription(personalNumberAndTokenReadModell);
-                eventstoreSubscriptionFactory.CreateSubscription(peopleReadModell);
+                eventstoreSubscriptionFactory.CreateSubscription(allTokensReadModellWriter);
                 personExecutor = new PersonExecutor(store, null);
-                personCommandHandler = new PersonCommandHandler(personExecutor, personalNumberAndTokenReadModell);
+                personCommandHandler = new PersonCommandHandler(personExecutor, null);
+
+                personalNumberAndTokenReadModell = new PersonalNumberAndTokenReadModell(sqlConStr);
+
                 isReady = true;
             }
         }
