@@ -7,6 +7,12 @@ using Notifications.Messages.Events.Person;
 
 namespace Notifications.Domain.ReadModell
 {
+    public interface IPersonalNumberAndTokenReadModell
+    {
+        List<PersonWithToken> GetTokenUsage(string firebaseToken);
+    }
+
+
     public interface IReadModell
     {
         void Handle(Event evt);

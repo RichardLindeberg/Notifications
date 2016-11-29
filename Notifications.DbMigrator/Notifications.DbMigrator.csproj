@@ -63,7 +63,6 @@
     <EmbeddedResource Include="Scripts\Script000002_CreateReadModells.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
@@ -72,7 +71,6 @@
   </Target>
   -->
   <UsingTask TaskName="TransformXml" AssemblyFile="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v10.0\Web\Microsoft.Web.Publishing.Tasks.dll" />
-
   <Target Name="AfterBuild">
     <Copy SourceFiles="app.config" DestinationFiles="obj\$(Configuration)\tempweb.config" />
     <TransformXml Source="obj\$(Configuration)\tempweb.config" Transform="app.$(USERNAME).config" Destination="obj\$(Configuration)\tempweb2.config" />

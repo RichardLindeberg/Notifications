@@ -16,7 +16,7 @@ namespace Notifications.DbMigrator
     {
         static int Main(string[] args)
         {
-            var connectionString = ConfigurationManager.ConnectionStrings["eventStore"].ConnectionString;
+            var connectionString = ConfigurationManager.ConnectionStrings["Notifications"].ConnectionString;
             EnsureDatabase.For.SqlDatabase(connectionString);
             var upgrader =
                 DeployChanges.To

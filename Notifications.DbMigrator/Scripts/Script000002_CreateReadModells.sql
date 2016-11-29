@@ -42,3 +42,82 @@ CREATE NONCLUSTERED INDEX [IX_AllTokens_ReadModell_PersonalNumber] ON [dbo].[All
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 
+
+CREATE TABLE [dbo].[AllTokens_ReadModell_Commits](
+	[id] [int] IDENTITY(1,1) NOT NULL,
+	[commitId] [uniqueidentifier] NOT NULL,
+ CONSTRAINT [PK_AllTokens_ReadModell_Commits] PRIMARY KEY CLUSTERED 
+(
+	[id] DESC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+
+CREATE PROCEDURE CleanAllTokens_ReadModell_Commits AS 
+BEGIN
+IF (SELECT COUNT(*) FROM AllTokens_ReadModell_Commits) > 1000
+	BEGIN
+		DECLARE @keepCommit int
+		select top 1 @keepCommit = id from AllTokens_ReadModell_Commits ORDER by id desc 
+		DELETE FROM AllTokens_ReadModell_Commits where id != @keepCommit
+	END
+END
+
+
+GO 
+CREATE PROCEDURE AllTokens_ReadModell_ByToken @FireBaseToken nvarchar(400) AS 
+BEGIN
+SELECT TOP (1000) [RowID]
+      ,[PersonalNumber]
+      ,[FireBaskeToken]
+      ,[NotificationTypeId]
+  FROM [DbUpTesting].[dbo].[AllTokens_ReadModell]
+  WHERE FireBaskeToken = @FireBaseToken
+END
+
+
+GO
+CREATE PROCEDURE AllTokens_ReadModell_Add
+	 @PersonalNumber  varchar(12), 
+     @FireBaskeToken nvarchar(400),
+     @NotificationTypeId nvarchar(50), 
+	 @CommitId UNIQUEIDENTIFIER 
+	 AS 
+BEGIN
+BEGIN TRAN 
+	INSERT INTO [dbo].[AllTokens_ReadModell]
+			   ([PersonalNumber]
+			   ,[FireBaskeToken]
+			   ,[NotificationTypeId])
+		 VALUES (
+			   @PersonalNumber, 
+			   @FireBaskeToken, 
+			   @NotificationTypeId
+			   )
+	INSERT INTO AllTokens_ReadModell_Commits (commitId) VALUES (@CommitId)
+COMMIT TRAN
+EXEC CleanAllTokens_ReadModell_Commits
+END
+
+GO
+
+CREATE PROCEDURE AllTokens_ReadModell_Remove 
+	 @PersonalNumber  varchar(12), 
+     @FireBaskeToken nvarchar(400),
+     @NotificationTypeId nvarchar(50), 
+	 @CommitId UNIQUEIDENTIFIER 
+	 AS 
+BEGIN
+BEGIN TRAN 
+	DELETE FROM [dbo].[AllTokens_ReadModell]
+			   WHERE [PersonalNumber] = @PersonalNumber
+					AND [FireBaskeToken] = @FireBaskeToken
+					AND [NotificationTypeId] = @NotificationTypeId
+
+	INSERT INTO AllTokens_ReadModell_Commits (commitId) VALUES (@CommitId)
+COMMIT TRAN
+EXEC CleanAllTokens_ReadModell_Commits
+END
+
