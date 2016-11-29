@@ -2,7 +2,7 @@
 
 namespace Notifications.Messages.Events
 {
-    public class Event
+    public class Event : IEvent
     {
         public Event()
         {

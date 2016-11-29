@@ -57,7 +57,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scripts\Script000001_CreateTables.sql" />
+    <EmbeddedResource Include="Scripts\Script000001_CreateNEventStore.sql" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scripts\Script000002_CreateReadModells.sql" />

@@ -51,6 +51,7 @@
     <Compile Include="BadEventInStreamException.cs" />
     <Compile Include="NotificationSender\FireBaseNotificationResponse.cs" />
     <Compile Include="FirebaseTokenAndNotificationTypeId.cs" />
+    <Compile Include="NotificationSender\FirebaseNotificationSender.cs" />
     <Compile Include="NotificationSender\IFirebaseNotificationSender.cs" />
     <Compile Include="ReadModell\IPersonalNumberAndTokenReadModell.cs" />
     <Compile Include="Person.cs" />
@@ -58,6 +59,10 @@
     <Compile Include="IPersonExecutor.cs" />
     <Compile Include="ReadModell\PersonWithToken.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Subscription\IHandle.cs" />
+    <Compile Include="Subscription\ISubScriptionConsumer.cs" />
+    <Compile Include="Subscription\ISubscriptionConsumerCommiter.cs" />
+    <Compile Include="Subscription\MultiActiveTokenProhibiter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

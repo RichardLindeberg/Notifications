@@ -1,23 +1,23 @@
-namespace Notifications.Storage.ReadModells
+namespace Notifications.Storage.Subscriptions
 {
     using System;
     using System.Data;
     using System.Data.SqlClient;
 
-    using Messages.Events.Person;
-
+    using Notifications.Domain.Subscription;
     using Notifications.Messages.Events;
+    using Notifications.Messages.Events.Person;
 
-    public class AllTokensReadModellWriterWriter : IHandle<FirebaseTokenAdded>, IHandle<FirebaseTokenRemoved>, IReadModellWriter
+    public class AddRemoveTokenToReadModellSubscriptionConsumer : IHandle<FirebaseTokenAdded>, IHandle<IFirebaseTokenRemoved>, ISubscriptionConsumer
     {
         private readonly string _sqlConnection;
 
-        public AllTokensReadModellWriterWriter(string sqlConnection)
+        public AddRemoveTokenToReadModellSubscriptionConsumer(string sqlConnection)
         {
             _sqlConnection = sqlConnection;
         }
 
-        public void Handle(FirebaseTokenAdded evnt, Guid commitId)
+        public void Handle(FirebaseTokenAdded evnt, string checkPointToken)
         {
             using (var sqlConn = new SqlConnection(_sqlConnection))
             using (var cmd = new SqlCommand("AllTokens_ReadModell_Add", sqlConn))
@@ -29,7 +29,7 @@ namespace Notifications.Storage.ReadModells
                     cmd.Parameters.Add("@PersonalNumber", SqlDbType.NChar, 12).Value = evnt.PersonalNumber;
                     cmd.Parameters.Add("@FireBaskeToken", SqlDbType.NVarChar, 400).Value = evnt.FirebaseToken;
                     cmd.Parameters.Add("@NotificationTypeId", SqlDbType.NChar, 12).Value = evnt.NotificationTypeId;
-                    cmd.Parameters.Add("@CommitId", SqlDbType.UniqueIdentifier).Value = commitId;
+                    cmd.Parameters.Add("@checkPointToken", SqlDbType.NVarChar).Value = checkPointToken;
                     cmd.ExecuteNonQuery();
 
                 }
@@ -41,7 +41,7 @@ namespace Notifications.Storage.ReadModells
             }
         }
 
-        public void Handle(FirebaseTokenRemoved evnt, Guid commitId)
+        public void Handle(IFirebaseTokenRemoved evnt, string checkPointToken)
         {
             using (var sqlConn = new SqlConnection(_sqlConnection))
             using (var cmd = new SqlCommand("AllTokens_ReadModell_Remove", sqlConn))
@@ -51,12 +51,12 @@ namespace Notifications.Storage.ReadModells
                 cmd.Parameters.Add("@PersonalNumber", SqlDbType.NChar, 12).Value = evnt.PersonalNumber;
                 cmd.Parameters.Add("@FireBaskeToken", SqlDbType.NVarChar, 400).Value = evnt.FirebaseToken;
                 cmd.Parameters.Add("@NotificationTypeId", SqlDbType.NChar, 12).Value = evnt.NotificationTypeId;
-                cmd.Parameters.Add("@CommitId", SqlDbType.UniqueIdentifier).Value = commitId;
+                cmd.Parameters.Add("@CheckPointToken", SqlDbType.NVarChar).Value = checkPointToken;
                 cmd.ExecuteNonQuery();
             }
         }
 
-        public string GetLastCommit()
+        public string GetCheckPointToken()
         {
             using (var sqlConn = new SqlConnection(_sqlConnection))
             using (var cmd = new SqlCommand("AllTokens_ReadModell_LastCommitId", sqlConn))
@@ -67,25 +67,25 @@ namespace Notifications.Storage.ReadModells
                 {
                     if (dr.Read())
                     {
-                        return dr["CommitId"].ToString();
+                        return dr["CheckPointToken"].ToString();
                     }
                     return null;
                 }
             }
         }
 
-        public void NewEvent(Event @event, string commitId)
+        public void NewEvent(Event @event, string checkPointToken)
         {
             var addToken = @event as FirebaseTokenAdded;
             if (addToken != null)
             {
-                Handle(addToken, Guid.Parse(commitId));
+                Handle(addToken, checkPointToken);
             }
 
-            var removeToken = @event as FirebaseTokenRemoved;
+            var removeToken = @event as IFirebaseTokenRemoved;
             if (removeToken != null)
             {
-                Handle(removeToken, Guid.Parse(commitId));
+                Handle(removeToken, checkPointToken);
             }
         }
     }

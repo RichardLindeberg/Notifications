@@ -12,8 +12,10 @@ namespace Notifications.Domain.UnitTests.PipeLineHook
     using NEventStore.Client;
 
     using Notifications.Domain.ReadModell;
+    using Notifications.Domain.Subscription;
     using Notifications.Storage;
     using Notifications.Storage.ReadModells;
+    using Notifications.Storage.Subscriptions;
 
     using NUnit.Framework;
 
@@ -26,7 +28,7 @@ namespace Notifications.Domain.UnitTests.PipeLineHook
 
         private IStoreEvents _store;
 
-        private Mock<IReadModellWriter> _readModell;
+        private Mock<ISubscriptionConsumer> _readModell;
 
         [OneTimeSetUp]
         protected void Setup()
@@ -40,7 +42,7 @@ namespace Notifications.Domain.UnitTests.PipeLineHook
 
             var esf = new EventstoreSubscriptionFactory(_store, pipeLineHook);
 
-            _readModell = new Mock<IReadModellWriter>();
+            _readModell = new Mock<ISubscriptionConsumer>();
 
             esf.CreateSubscription(_readModell.Object);
 

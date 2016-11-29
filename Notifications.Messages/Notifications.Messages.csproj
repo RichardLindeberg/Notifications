@@ -40,15 +40,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\AddFireBaseToken.cs" />
+    <Compile Include="Commands\AddFireBaseTokenCommand.cs" />
     <Compile Include="Commands\IPersonCommand.cs" />
-    <Compile Include="Commands\RemoveFireBaseToken.cs" />
-    <Compile Include="Commands\SendMessage.cs" />
-    <Compile Include="Events\Batch\Class1.cs" />
+    <Compile Include="Commands\RemoveFireBaseTokenCommand.cs" />
+    <Compile Include="Commands\RemoveFireBaseTokenDueToDuplicateCommand.cs" />
+    <Compile Include="Commands\SendMessageCommand.cs" />
+    <Compile Include="Events\Batch\BatchEvent.cs" />
     <Compile Include="Events\Event.cs" />
+    <Compile Include="Events\IEvent.cs" />
     <Compile Include="Events\Person\FailedToSendFirebaseMessage.cs" />
     <Compile Include="Events\Person\FirebaseTokenAdded.cs" />
     <Compile Include="Events\Person\FirebaseTokenRemoved.cs" />
+    <Compile Include="Events\Person\FirebaseTokenRemovedDueToDuplicate.cs" />
+    <Compile Include="Events\Person\IFirebaseTokenRemoved.cs" />
     <Compile Include="Events\Person\PersonEvent.cs" />
     <Compile Include="Events\Person\PersonRemoved.cs" />
     <Compile Include="Events\Person\SentFirebaseMessage.cs" />

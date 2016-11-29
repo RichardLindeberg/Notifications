@@ -1,14 +1,11 @@
-﻿using Notifications.Domain.ReadModell;
-
-namespace Notifications.Storage
+﻿namespace Notifications.Storage.Subscriptions
 {
     using System;
 
     using NEventStore;
     using NEventStore.Client;
 
-    using Notifications.Domain;
-    using Notifications.Storage.ReadModells;
+    using Notifications.Domain.Subscription;
 
     public class EventstoreSubscriptionFactory
     {
@@ -22,16 +19,16 @@ namespace Notifications.Storage
             _pipeLineHook = pipeLineHook;
         }
 
-        public void CreateSubscription(IReadModellWriter readModellWriter, int interval = 5000)
+        public void CreateSubscription(ISubscriptionConsumer subscriptionConsumer, int interval = 5000)
         {
-            ReadModellSubscriber readModellSubscriber = new ReadModellSubscriber(readModellWriter);
-            StartSubscribing(readModellSubscriber, readModellWriter.GetLastCommit(), interval);
+            ReadModellSubscriber readModellSubscriber = new ReadModellSubscriber(subscriptionConsumer);
+            StartSubscribing(readModellSubscriber, subscriptionConsumer.GetCheckPointToken(), interval);
         }
 
-        private void StartSubscribing(IObserver<ICommit> observer, string startAtCommit = null, int interval = 5000)
+        private void StartSubscribing(IObserver<ICommit> observer, string checkPointToken = null, int interval = 5000)
         {
             var pc = new PollingClient(_store.Advanced, interval);
-            var commitObserver = pc.ObserveFrom(startAtCommit);
+            var commitObserver = pc.ObserveFrom(checkPointToken);
 
             _pipeLineHook.Subscribe(commitObserver);
             commitObserver.Subscribe(observer);

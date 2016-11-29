@@ -22,6 +22,12 @@
             return Content(HttpStatusCode.Found, FakedDi.PersonalNumberAndTokenReadModell.GetPerson(personalNumber));
         }
 
+        [Route("Person/{personalNumber}/Events")]
+        public IHttpActionResult GetEvents(string personalNumber)
+        {
+            return Content(HttpStatusCode.Found, FakedDi.LoadStream("Person-" + personalNumber));
+        }
+
 
 
     }

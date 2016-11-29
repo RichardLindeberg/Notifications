@@ -65,7 +65,7 @@ namespace Notifications.Domain
             _sentMessageIds.Add(evt.MessageId);
         }
 
-        public void Apply(FirebaseTokenRemoved evt)
+        public void Apply(IFirebaseTokenRemoved evt)
         {
             var ft = new FirebaseTokenAndNotificationTypeId(evt.FirebaseToken, evt.NotificationTypeId);
             _firebaseTokenAndNotificationTypeIds.RemoveAll(t => t.Equals(ft));
@@ -88,6 +88,16 @@ namespace Notifications.Domain
             if (_firebaseTokenAndNotificationTypeIds.Contains(ft))
             {
                 var evt = new FirebaseTokenRemoved(PersonalNumber, fireBaseToken, notificationTypeId);
+                Publish(evt);
+            }
+        }
+
+
+        public void RemoveTokenDueToDuplicate(string firebaseToken, string duplicateWithPersonalNumber)
+        {
+            foreach (var ftn in _firebaseTokenAndNotificationTypeIds.Where(t => t.FirebaseToken == firebaseToken).ToList())
+            {
+                var evt = new FirebaseTokenRemovedDueToDuplicate(PersonalNumber,duplicateWithPersonalNumber, firebaseToken, ftn.NotificationTypeId);
                 Publish(evt);
             }
         }
@@ -141,5 +151,6 @@ namespace Notifications.Domain
                 throw new BadEventInStreamException("There was an event in the stream belonging to another aggregate");
             }
         }
+
     }
 }

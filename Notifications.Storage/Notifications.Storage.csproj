@@ -50,17 +50,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EventStoreFactory.cs" />
-    <Compile Include="EventstoreSubscriptionFactory.cs" />
+    <Compile Include="NLogLogger.cs" />
+    <Compile Include="Subscriptions\EventstoreSubscriptionFactory.cs" />
     <Compile Include="FakedDi.cs" />
     <Compile Include="IPipeLineHook.cs" />
     <Compile Include="ReadModellSubscriber.cs" />
     <Compile Include="PersonExecutor.cs" />
     <Compile Include="PipeLineHook.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReadModells\AllTokensReadModellWriterWriter.cs" />
+    <Compile Include="Subscriptions\AddRemoveTokenToReadModellSubscriptionConsumer.cs" />
     <Compile Include="ReadModells\PersonalNumberAndTokenReadModell.cs" />
-    <Compile Include="ReadModells\IHandle.cs" />
-    <Compile Include="ReadModells\IReadModellWriter.cs" />
+    <Compile Include="Subscriptions\SubscriptionConsumerCommiter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

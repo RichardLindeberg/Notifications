@@ -5,6 +5,8 @@ using System.Web.Http;
 
 namespace Notifications.WebApi
 {
+    using Notifications.Storage;
+
     public static class WebApiConfig
     {
         public static void Register(HttpConfiguration config)
@@ -19,6 +21,8 @@ namespace Notifications.WebApi
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            var dummy = FakedDi.GetPersonCommandHandler;
         }
     }
 }

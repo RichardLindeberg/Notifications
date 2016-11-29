@@ -35,14 +35,6 @@
             }
         }
 
-        private static PersonWithToken ToPersonWithToken(SqlDataReader dr)
-        {
-            return new PersonWithToken(
-                dr["PersonalNumber"].ToString(),
-                dr["FireBaskeToken"].ToString(),
-                dr["NotificationTypeId"].ToString());
-        }
-
         public IEnumerable<PersonWithToken> GetPerson(string personalNumber)
         {
             using (var sqlConn = new SqlConnection(_sqlConnectionString))
@@ -78,6 +70,14 @@
                     }
                 }
             }
+        }
+
+        private static PersonWithToken ToPersonWithToken(SqlDataReader dr)
+        {
+            return new PersonWithToken(
+                dr["PersonalNumber"].ToString(),
+                dr["FireBaskeToken"].ToString(),
+                dr["NotificationTypeId"].ToString());
         }
     }
 }

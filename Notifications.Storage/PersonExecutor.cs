@@ -13,7 +13,7 @@ namespace Notifications.Storage
 
     public class PersonExecutor : IPersonExecutor
     {
-        public const string StreamName = "Person-";
+        public const string StreamName = "Person";
         private readonly IStoreEvents _store;
 
         private readonly IFirebaseNotificationSender _firebaseNotificationSender;

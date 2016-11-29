@@ -31,6 +31,11 @@ namespace Notifications.Domain
                 throw new ArgumentException("Command is not valid, missing requeried parameters");
             }
 
+            if (command.PersonalNumber.Length != 12)
+            {
+                throw new ArgumentException("Personal number must be 12 characters");
+            }
+
             //if (_personalNumberAndTokenReadModell.TokenExistsOnOtherPersonalNumber(
             //    command.PersonalNumber,
             //    command.FirebaseToken))
@@ -45,6 +50,12 @@ namespace Notifications.Domain
         public void Handle(RemoveFireBaseTokenCommand command)
         {
             _personExecutor.Execute(command.PersonalNumber, person => person.RemoveToken(command.FirebaseToken, command.NotificationTypeId), command.CommandId);
+        }
+
+        public void Handle(RemoveFireBaseTokenDueToDuplicateCommand command)
+        {
+            _personExecutor.Execute(command.PersonalNumber, person => person.RemoveTokenDueToDuplicate(command.FirebaseToken, command.DuplicateWithPersonalNumber), command.CommandId);
+
         }
 
         public void Handle(SendMessageCommand command)

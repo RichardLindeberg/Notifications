@@ -1,8 +1,9 @@
-﻿using NEventStore.Persistence.Sql.SqlDialects;
-
-namespace Notifications.Storage
+﻿namespace Notifications.Storage
 {
     using NEventStore;
+    using NEventStore.Persistence.Sql.SqlDialects;
+
+    using Notifications.Storage.EventStore.Logging.NLog;
 
     public class EventStoreFactory
     {
@@ -17,11 +18,12 @@ namespace Notifications.Storage
         {
             return Wireup.Init()
                 .UsingSqlPersistence("Notifications").WithDialect(new MsSqlDialect())
-                .InitializeStorageEngine()
                 //.UsingInMemoryPersistence()
                 .UsingJsonSerialization()
                 .HookIntoPipelineUsing(_pipeLineHook)
+                .LogTo(t => new NLogLogger(t))
                 .Build();
         }
+        
     }
 }
