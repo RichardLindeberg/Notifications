@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace Notifications.DbMigrator
 {
+    using System.Configuration;
     using System.Reflection;
 
     using DbUp;
+    using DbUp.Support.SqlServer;
 
     class Program
     {
         static int Main(string[] args)
         {
-            var connectionString =
-      args.FirstOrDefault()
-      ?? "Server=(local); Database=DbUpTesting; Trusted_connection=true";
+            var connectionString = ConfigurationManager.ConnectionStrings["eventStore"].ConnectionString;
             EnsureDatabase.For.SqlDatabase(connectionString);
             var upgrader =
                 DeployChanges.To
