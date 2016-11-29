@@ -4,6 +4,8 @@ using Notifications.Messages.Events.Person;
 
 namespace Notifications.Domain.ReadModell
 {
+    using System.Collections.Generic;
+
     public class PeopleReadModell : IReadModell
     {
         public PeopleReadModell()

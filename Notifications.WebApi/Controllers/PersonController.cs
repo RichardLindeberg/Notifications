@@ -6,16 +6,11 @@
 
     using Messages.Commands;
 
-    public class PersonController : ApiController
-    {
-        [Route("Person")]
-        [HttpGet]
-        public IHttpActionResult Get()
-        {
-            return Content(HttpStatusCode.Found, FakedDi.PeopleReadModell.PeopleWithTokens.Values);
-        }
+    using Notifications.Domain.ReadModell;
 
-        [Route("Person/AddToken")]
+    public class AddFireBaseTokenController : ApiController
+    {
+        [Route("AddFireBaseToken")]
         [HttpPost]
         public IHttpActionResult AddToken(AddFireBaseTokenCommand command)
         {
@@ -30,15 +25,18 @@
             }
             catch (Exception)
             {
-                
+
                 throw;
             }
             return Ok();
         }
+    }
 
-        [Route("Person/RemoveToken")]
+    public class RemoveFireBaseTokenController : ApiController
+    {
+        [Route("AddFireBaseToken")]
         [HttpPost]
-        public IHttpActionResult RemoveToken(RemoveFireBaseTokenCommand command)
+        public IHttpActionResult AddToken(RemoveFireBaseTokenCommand command)
         {
             if (command == null)
             {
@@ -54,8 +52,26 @@
 
                 throw;
             }
-
             return Ok();
         }
+    }
+    public class PersonController : ApiController
+    {
+        [Route("Person")]
+        [HttpGet]
+        public IHttpActionResult Get()
+        {
+            return Content(HttpStatusCode.Found, FakedDi.PeopleReadModell.PeopleWithTokens.Values);
+        }
+
+        [Route("Person/{personalNumber}")]
+        [HttpGet]
+        public IHttpActionResult Get(string personalNumber)
+        {
+            return Content(HttpStatusCode.Found, FakedDi.PeopleReadModell.PeopleWithTokens[new PersonWithToken("", "", "")]);
+        }
+
+
+
     }
 }
