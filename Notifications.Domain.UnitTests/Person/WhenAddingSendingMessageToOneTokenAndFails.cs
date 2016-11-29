@@ -33,7 +33,7 @@ namespace Notifications.Domain.UnitTests.Person
         {
             _firebaseSender = new Mock<IFirebaseNotificationSender>(MockBehavior.Strict);
             _firebaseSender.Setup(t => t.SendNotification(Token, MessageText))
-                .Returns(new FireBaseNotificationResponse(false, true, "Error message"));
+                .Returns(new FireBaseNotificationResponse(false, true, "Error message", string.Empty));
             _sut = new Person(Pno, _firebaseSender.Object);
             _sut.AddToken(Token, Not);
             _sut.SendMessage("MessageId-1", MessageText, Not);

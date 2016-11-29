@@ -13,6 +13,7 @@ namespace Notifications.Domain.UnitTests.PipeLineHook
 
     using NUnit.Framework;
 
+    [TestFixture]
     public class WhenAddingToStore
     {
         private PipeLineHook pipeLineHook;
