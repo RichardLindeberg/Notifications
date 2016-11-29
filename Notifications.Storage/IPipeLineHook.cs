@@ -3,9 +3,10 @@ namespace Notifications.Storage
     using System;
 
     using NEventStore;
+    using NEventStore.Client;
 
     public interface IPipeLineHook : IPipelineHook
     {
-        IDisposable Subscribe(IObserver<ICommit> observer);
+        IDisposable Subscribe(IObserveCommits commitObserver);
     }
 }

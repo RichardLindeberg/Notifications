@@ -4,18 +4,19 @@ namespace Notifications.Storage
     using System.Collections.Generic;
 
     using NEventStore;
+    using NEventStore.Client;
 
     using NLog;
 
     public class PipeLineHook : PipelineHookBase, IPipeLineHook
     {
-        private readonly List<IObserver<ICommit>> _messageObservers;
+        private readonly List<IObserveCommits> _messageObservers;
         
         private Logger log;
 
         public PipeLineHook()
         {
-            _messageObservers = new List<IObserver<ICommit>>();
+            _messageObservers = new List<IObserveCommits>();
             log = NLog.LogManager.GetCurrentClassLogger();
         }
 
@@ -25,26 +26,26 @@ namespace Notifications.Storage
             log.Info($"Post commit {committed.BucketId} {committed.StreamId}");
             foreach (var messageObserver in _messageObservers)
             {
-                messageObserver.OnNext(committed);
+                messageObserver.PollNow();
             }
         }
 
-        public IDisposable Subscribe(IObserver<ICommit> observer)
+        public IDisposable Subscribe(IObserveCommits commitObserver)
         {
-            if (!_messageObservers.Contains(observer))
+            if (!_messageObservers.Contains(commitObserver))
             {
-                _messageObservers.Add(observer);
+                _messageObservers.Add(commitObserver);
             }
 
-            return new Unsubscriber(_messageObservers, observer);
+            return new Unsubscriber(_messageObservers, commitObserver);
         }
 
         private class Unsubscriber : IDisposable
         {
-            private readonly List<IObserver<ICommit>> _observers;
-            private readonly IObserver<ICommit> _observer;
+            private readonly List<IObserveCommits> _observers;
+            private readonly IObserveCommits _observer;
 
-            public Unsubscriber(List<IObserver<ICommit>> observers, IObserver<ICommit> observer)
+            public Unsubscriber(List<IObserveCommits> observers, IObserveCommits observer)
             {
                 _observers = observers;
                 _observer = observer;

@@ -32,11 +32,9 @@ namespace Notifications.Storage
             var pc = new PollingClient(_store.Advanced, interval);
             var commitObserver = pc.ObserveFrom(startAtCommit);
 
-            var observerForPollingClient = new ObserverForPollingClient(commitObserver);
-            _pipeLineHook.Subscribe(observerForPollingClient);
+            _pipeLineHook.Subscribe(commitObserver);
             commitObserver.Subscribe(observer);
             commitObserver.Start();
-//            commitObserver.PollNow();
         }
     }
 }

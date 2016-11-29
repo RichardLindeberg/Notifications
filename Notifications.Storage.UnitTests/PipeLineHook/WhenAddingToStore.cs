@@ -3,15 +3,20 @@
 namespace Notifications.Domain.UnitTests.PipeLineHook
 {
     using System;
+    using System.Threading;
+
     using Domain;
     using Messages;
     using Moq;
     using NEventStore;
     using NEventStore.Client;
 
+    using Notifications.Domain.ReadModell;
     using Notifications.Storage;
 
     using NUnit.Framework;
+
+    using Should;
 
     [TestFixture]
     public class WhenAddingToStore
@@ -20,45 +25,44 @@ namespace Notifications.Domain.UnitTests.PipeLineHook
 
         private IStoreEvents _store;
 
-        private Mock<IObserver<ICommit>> _observer;
+        private PeopleReadModell _readModell;
 
         [OneTimeSetUp]
         protected void Setup()
         {
-
-            _observer = new Mock<IObserver<ICommit>>(MockBehavior.Loose);
             pipeLineHook = new PipeLineHook();
-            pipeLineHook.Subscribe(_observer.Object);
             _store = Wireup.Init()
                 .UsingInMemoryPersistence()
                 .UsingJsonSerialization()
                 .HookIntoPipelineUsing(pipeLineHook)
                 .Build();
 
-            var pc = new PollingClient(_store.Advanced);
-            var test = pc.ObserveFrom(null);
+            var esf = new EventstoreSubscriptionFactory(_store, pipeLineHook);
 
-            var stream = _store.CreateStream("TestStream");
-            stream.Add(new EventMessage() {Body = new PersonEvent("800412XXXX")});
-            stream.CommitChanges(Guid.NewGuid());
+            _readModell = new PeopleReadModell();
+
+            esf.CreateSubscription(_readModell);
+
+            var personExecutor = new PersonExecutor(_store, null);
+            personExecutor.Execute("8004120351", person => person.AddToken("token", "not"), Guid.NewGuid());
+            
         }
 
         [Test]
-        public void ShouldHaveSentOneEvent()
+        public void ShouldHaveOneToken()
         {
-            _observer.Verify(t => t.OnNext(It.IsAny<ICommit>()), Times.Once);
+            
+            _readModell.PeopleWithTokens.ShouldBeEmpty();
         }
 
         [Test]
-        public void ShouldNotHaveCalledCompleted()
+        public void AddingAgainShouldHavTwo()
         {
-            _observer.Verify(t => t.OnCompleted(), Times.Never);
-        }
 
-        [Test]
-        public void ShouldNotHaveCalledError()
-        {
-            _observer.Verify(t => t.OnError(It.IsAny<Exception>()), Times.Never);
+            var personExecutor = new PersonExecutor(_store, null);
+            personExecutor.Execute("8004120351", person => person.AddToken("token", "not2"), Guid.NewGuid());
+            Thread.Sleep(100);
+            _readModell.PeopleWithTokens.Count.ShouldEqual(2);
         }
 
     }
